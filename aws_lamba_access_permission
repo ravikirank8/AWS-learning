@@ -5,6 +5,12 @@
 
 Access permissions define what your Lambda function is allowed to do and who can invoke it.
 
+“Synchronous invocation is like a phone call — the caller waits for you to answer.
+
+Asynchronous is like sending an email — the caller sends it and moves on, and you respond later when ready.”
+
+
+
 
 
 
