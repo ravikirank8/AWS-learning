@@ -1,0 +1,57 @@
+What is an Event Source in AWS Lambda?
+Event Source iis that triggers  a Lambda function to run.
+
+Lambda doesn’t run by itself — it needs an event from somewhere.
+
+The event source sends data to Lambda when something happens, like a file upload or a message arriving.
+
+Types of Event Sources
+Push-based event sources:
+
+These send events directly to Lambda.
+
+Lambda is immediately triggered.
+
+Example services: S3, API Gateway, SNS.
+
+For example, when you upload a file to S3, S3 sends an event to Lambda to process that file.
+
+Pull-based event sources:
+
+Lambda polls the event source, checking for new data regularly.
+
+Example services: SQS, Kinesis, DynamoDB Streams.
+
+Lambda keeps asking, "Is there any new message or record to process?"
+
+When there is, Lambda executes.
+
+How Does It Work?
+You configure Lambda to listen to a specific event source.
+
+When an event happens, the event source sends the event data to Lambda.
+
+Lambda receives this event as input and runs your code with that data.
+
+Event Source Mapping (For Pull-based)
+For services like SQS or Kinesis, Lambda doesn’t get pushed events.
+
+Instead, Lambda sets up Event Source Mapping — this means Lambda polls the queue or stream for new messages.
+
+When messages arrive, Lambda pulls them and processes.
+
+Simple Example (S3 Bucket Trigger)
+You create a Lambda function.
+
+You set up your S3 bucket to send an event to Lambda whenever a new file is uploaded.
+
+When you upload a file, S3 sends an event with details of the file to Lambda.
+
+Lambda function runs automatically and can read/process the uploaded file.
+
+Why Are Event Sources Important?
+They connect Lambda with other AWS services.
+
+They make Lambda event-driven — your code runs only when needed.
+
+This allows for serverless automation and integration.
