@@ -1,0 +1,10 @@
+| Permission Type       | Purpose                             | Example                        |
+| --------------------- | ----------------------------------- | ------------------------------ |
+| Execution Role (IAM)  | What Lambda can do during execution | Read S3, write CloudWatch logs |
+| Resource-based Policy | Who/what can invoke Lambda function | Allow API Gateway to invoke    |
+
+Access permissions define what your Lambda function is allowed to do and who can invoke it.
+
+
+
+
