@@ -1,0 +1,75 @@
+AWS Lambda is a serverless compute service provided by Amazon Web Services that lets you run code without provisioning or managing servers.
+You simply upload your code, and Lambda takes care of everything required to run and scale it. You pay only for the compute time you use — no charge when your code is not running.
+
+🔧 How AWS Lambda Works
+You write your code (called a Lambda function).
+
+You deploy it to AWS Lambda.
+
+You define a trigger (like an HTTP request, file upload, database change, etc.).
+
+AWS Lambda automatically runs the function when the trigger is activated.
+
+✅ Key Features
+Serverless: No need to manage infrastructure.
+
+Event-driven: Automatically responds to events.
+
+Supports many languages: Python, Node.js, Java, C#, Go, etc.
+
+Integrated with other AWS services like S3, DynamoDB, API Gateway, etc.
+
+📦 Example: Image Resizer with S3 and Lambda
+🔸 Scenario:
+You want to automatically resize images when they are uploaded to an S3 bucket.
+
+🔸 Steps:
+Upload an image to the S3 bucket (my-image-uploads).
+
+Trigger a Lambda function when a new image is uploaded.
+
+Lambda resizes the image (e.g., creates a thumbnail).
+
+Save the resized image to another S3 bucket (my-thumbnail-storage).
+
+🧑‍💻 Example Code (Python Lambda Function)
+python
+Copy
+Edit
+import boto3
+from PIL import Image
+import io
+
+s3 = boto3.client('s3')
+
+def lambda_handler(event, context):
+    source_bucket = 'my-image-uploads'
+    target_bucket = 'my-thumbnail-storage'
+
+    # Get file name from the event
+    key = event['Records'][0]['s3']['object']['key']
+
+    # Get the image from S3
+    response = s3.get_object(Bucket=source_bucket, Key=key)
+    image = Image.open(response['Body'])
+
+    # Resize image
+    image.thumbnail((100, 100))
+    buffer = io.BytesIO()
+    image.save(buffer, 'JPEG')
+    buffer.seek(0)
+
+    # Upload resized image to another bucket
+    s3.put_object(Bucket=target_bucket, Key=f'thumbnail-{key}', Body=buffer, ContentType='image/jpeg')
+
+    return {'statusCode': 200, 'body': 'Thumbnail created successfully'}
+🧩 Common Lambda Use Cases
+Run backend logic for web/mobile apps via API Gateway
+
+Process files uploaded to S3
+
+Respond to DynamoDB stream changes
+
+Create CRON jobs with CloudWatch (scheduled tasks)
+
+Real-time data processing (e.g., Kinesis, Kafka streams)
