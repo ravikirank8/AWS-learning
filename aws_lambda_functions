@@ -1,0 +1,54 @@
+AWS Lambda	Serverless service that runs your code
+Lambda Function	The actual code written by you
+Handler	The function AWS runs as the entry point
+Event Object	Input data sent to your function
+A source is what triggers your Lambda function.
+The context object provides information about the function’s runtime environment, like:
+
+The event object is the data passed to your Lambda function when it is triggered.
+The context object provides information about the function’s runtime environment, like:
+def lambda_handler(event, context):
+    print(event["name"])  # Lavanya
+
+
+The handler is the entry point to your Lambda function.
+AWS calls this function when your Lambda is triggered.
+
+def lambda_handler(event, context):
+
+
+🟡 Think of it like the starting point or main() in your program.
+
+🔹 Simple Example (Python)
+python
+
+def lambda_handler(event, context):
+    return "Hello from Lambda!"
+lambda_handler is the handler function.
+
+AWS calls this function automatically when the Lambda is triggered.
+
+It always takes two inputs:
+
+event = the data sent to the function (like input)
+
+context = information about the function and execution
+
+🔹 Example with Event Input
+Let's say you trigger your Lambda with this input:
+
+json
+
+{
+  "name": "Lavanya"
+}
+And your handler is:
+
+python
+
+def lambda_handler(event, context):
+    return f"Hello, {event['name']}!"
+🔄 Lambda Output:
+
+
+"Hello, Lavanya!"
