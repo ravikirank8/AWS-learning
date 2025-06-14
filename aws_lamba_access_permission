@@ -9,6 +9,11 @@ Access permissions define what your Lambda function is allowed to do and who can
 
 Asynchronous is like sending an email — the caller sends it and moves on, and you respond later when ready.”
 
+AWS Lambda pricing is based on how many requests you make and how long your code runs, depending on the memory and compute power you allocate.
+You pay only for what you use—no servers, no pre-purchased units.
+
+
+
 
 
 
