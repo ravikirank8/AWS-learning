@@ -1,5 +1,84 @@
+An easy of referencing all storage classes
+
+
+🟦 Block Storage (EBS) – Volume Types
+
+
+| Volume Type           | Type | Use Case             | IOPS/Throughput                | Price   | Features                      |
+| --------------------- | ---- | -------------------- | ------------------------------ | ------- | ----------------------------- |
+| **gp3**               | SSD  | General purpose      | 3,000 IOPS base (customizable) | Low     | Default for most              |
+| **io1/io2**           | SSD  | High-performance DB  | Up to 64,000 IOPS              | High    | Provisioned IOPS              |
+| **st1**               | HDD  | Big data, logs       | Throughput up to 500 MB/s      | Lower   | Sequential workloads          |
+| **sc1**               | HDD  | Cold storage         | Low throughput                 | Lowest  | Least used                    |
+| **io2 Block Express** | SSD  | Enterprise workloads | Ultra-high perf.               | Highest | SAN-like perf. (multi-attach) |
+
+🟩 File Storage (EFS / FSx) – Storage Classes
+| Class                       | Use Case           | Price        | Lifecycle                              |
+| --------------------------- | ------------------ | ------------ | -------------------------------------- |
+| EFS Standard                | Frequent access    | \~\$0.30/GB  | Default                                |
+| EFS One Zone                | Lower availability | \~\$0.16/GB  | Same AZ                                |
+| EFS Infrequent Access (IA)  | Cold files         | \~\$0.025/GB | Moves automatically after 30 days idle |
+| **EFS Intelligent-Tiering** | Mixed access       | —            | Auto moves between Standard and IA     |
+
+
+🔷 Amazon S3 – Advanced Storage Classes
+
+| **Storage Class**                                | **Use Case**                                | **Durability** | **Availability** | **Min Storage Duration** | **Retrieval Time** | **Key Benefit**                      |
+| ------------------------------------------------ | ------------------------------------------- | -------------- | ---------------- | ------------------------ | ------------------ | ------------------------------------ |
+| S3 Standard                                      | Frequently accessed data                    | 11 9s          | 99.99%           | None                     | Milliseconds       | High performance                     |
+| S3 Intelligent-Tiering                           | Unknown/unpredictable access                | 11 9s          | 99.9%–99.99%     | 30 days (for IA tiers)   | Milliseconds       | Auto cost savings                    |
+| S3 Standard-IA                                   | Infrequently accessed, but needed instantly | 11 9s          | 99.9%            | 30 days                  | Milliseconds       | 50% cheaper than Standard            |
+| S3 One Zone-IA                                   | Infrequent access in a single AZ            | 11 9s          | 99.5%            | 30 days                  | Milliseconds       | Cheaper than Standard-IA             |
+| S3 Glacier Instant Retrieval                     | Archive data, but quick access              | 11 9s          | 99.9%            | 90 days                  | Milliseconds       | 70% cheaper than IA                  |
+| S3 Glacier Flexible Retrieval (formerly Glacier) | Long-term archive, less frequent access     | 11 9s          | 99.99%           | 90 days                  | Minutes to hours   | Cheapest archive with bulk retrieval |
+| S3 Glacier Deep Archive                          | Very long-term archive (compliance)         | 11 9s          | 99.99%           | 180 days                 | 12 hours           | Lowest cost in AWS                   |
+
+
+| Tier                           | Best For                                   | Retrieval Time   | Cost     | Use Case                    |
+| ------------------------------ | ------------------------------------------ | ---------------- | -------- | --------------------------- |
+| **Glacier Instant Retrieval**  | Active archive with sub-second access      | Milliseconds     | Low      | Legal docs, medical records |
+| **Glacier Flexible Retrieval** | Non-urgent archive (default Glacier)       | Minutes to hours | Very low | Backups, DR                 |
+| **Glacier Deep Archive**       | Regulatory/archive with rarely needed data | 12 hours         | Lowest   | Compliance, legal holds     |
+
+
+
+
+📌 Storage Class Use Case Matrix
+
+| Scenario                                   | Best Storage Class      |
+| ------------------------------------------ | ----------------------- |
+| Daily accessed website content             | S3 Standard             |
+| Data lake with unpredictable usage         | S3 Intelligent-Tiering  |
+| Logs older than 30 days, occasionally read | S3 Standard-IA          |
+| Compliance data for 7+ years               | S3 Glacier Deep Archive |
+| App boot volumes                           | EBS gp3                 |
+| High IOPS database                         | EBS io2                 |
+| CI/CD shared file system                   | EFS One Zone + IA       |
+| ML training on S3-hosted datasets          | FSx for Lustre          |
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 | **Storage Type**                | **Ideal Use Cases**                                                                                                                                               | **Optimization Strategy**                                                                                                                                                                                                                                                                                                    | **Architectural Considerations**                                                                                                                                                                                                                     |
 | ------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **🟦 Block Storage (EBS)**      | - EC2 root volumes<br>- High-performance DBs (RDS, NoSQL)<br>- Low-latency transactional systems<br>- Log processing                                              | - Use **gp3** over gp2 (lower cost, decoupled IOPS)<br>- **Right-size volumes**; avoid over-provisioning<br>- Use **st1/sc1** for throughput workloads<br>- Schedule **snapshot cleanup** using AWS Backup                                                                                                                   | - **Tightly coupled to EC2**<br>- Plan per AZ, not cross-AZ<br>- Consider RAID for performance<br>- Use **EBS-optimized** EC2 instances                                                                                                              |
+| **🟦 Block Storage (EBS)**      | - EC2 root volumes<br>-High-performance DBs (RDS, NoSQL)<br>- Low-latency transactional systems<br>- Log processing                                              | - Use **gp3** over gp2 (lower cost, decoupled IOPS)<br>- **Right-size volumes**; avoid over-provisioning<br>- Use **st1/sc1** for throughput workloads<br>- Schedule **snapshot cleanup** using AWS Backup                                                                                                                   | - **Tightly coupled to EC2**<br>- Plan per AZ, not cross-AZ<br>- Consider RAID for performance<br>- Use **EBS-optimized** EC2 instances                                                                                                              |
 | **🟩 File Storage (EFS / FSx)** | - Shared file systems<br>- Linux-based apps<br>- Lift-and-shift workloads<br>- ML / data science needing parallel access<br>- CI/CD code repos                    | - Use **EFS One Zone** for dev/test or non-critical data<br>- Enable **Intelligent-Tiering** (automatically moves infrequently accessed files to IA tier)<br>- Use **FSx for Lustre** for high-speed workloads from S3<br>- Mount with correct throughput/performance mode                                                   | - More expensive than S3 – use only when app requires shared FS<br>- EFS has **burst mode** (free) vs. provisioned throughput (extra cost)<br>- FSx for Windows for SMB workloads<br>- Leverage VPC peering/VPC endpoints for access across networks |
 | **🟨 Object Storage (S3)**      | - Static website hosting<br>- Backup/archive<br>- Media delivery (videos, images)<br>- Logs, reports, IoT telemetry<br>- Data lake/analytics<br>- ML input/output | - Use **lifecycle rules** to transition data to:<br> → S3 IA<br> → S3 Glacier<br> → S3 Deep Archive<br>- Use **S3 Intelligent-Tiering** for unpredictable access<br>- Compress files (zip, gzip) before storing<br>- Use **S3 Storage Lens** to analyze and optimize usage<br>- Configure **multi-part uploads** efficiently | - **11 9s durability** but S3 Standard is pricier<br>- Use **One Zone-IA** for non-critical data<br>- Retrieve only necessary data from Glacier<br>- Use **event-driven access** (S3 + Lambda) for processing efficiency                             |
+
+
+
