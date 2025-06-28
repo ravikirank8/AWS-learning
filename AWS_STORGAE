@@ -75,3 +75,85 @@ Integrated with on-premises or hybrid architectures
 ❌ Protocol-dependent performance limitations (NFS/SMB)
 
 ===================
+
+➤ Definition:
+Object storage manages data as objects – each with metadata and a unique identifier. It's flat, not hierarchical. Accessed via HTTP APIs (e.g., REST, SDKs).
+
+➤ AWS Service:
+Amazon S3 (Simple Storage Service)
+
+➤ Use Cases:
+Backup and archival
+Big data and analytics
+Static web content hosting
+Media delivery (video, images)
+Data lake storage
+IoT data ingestion
+Serverless applications
+
+➤ When to Pick:
+When you need internet-accessible, cost-effective, and highly scalable storage
+For unstructured data (images, logs, videos)
+If lifecycle management and storage tiering are priorities
+When you want to build event-driven or serverless architectures
+
+
+➤ Key Features:
+Infinitely scalable storage
+
+Global namespace via unique object keys
+
+Built-in versioning, encryption, lifecycle policies
+
+Event-driven (integrates with Lambda, SNS, SQS)
+
+Supports storage classes for cost optimization
+
+➤ Storage Classes:
+S3 Standard
+
+S3 Intelligent-Tiering
+
+S3 Standard-IA (Infrequent Access)
+
+S3 One Zone-IA
+
+S3 Glacier / Glacier Deep Archive (for archival)
+
+➤ Pros:
+✅ Highly scalable & durable (11 9s durability)
+✅ Built for internet-scale data sharing
+✅ Native integration with analytics & AI/ML tools
+✅ Lifecycle policies reduce costs automatically
+✅ Supports static website hosting
+
+➤ Cons:
+❌ Not suitable for traditional OS-level applications
+❌ Higher latency – not built for transactional I/O
+❌ Requires apps to handle object-based access patterns
+
+
+==============
+
+✅ Choosing the Right Storage – Architect's View:
+Scenario	Choose
+Need fast, consistent latency for DB	Block (EBS)
+Shared file system for EC2s or HPC workloads	File (EFS or FSx)
+Internet-scale web content / backup	Object (S3)
+Store logs, images, video at low cost	Object (S3 + Glacier)
+Legacy Windows apps requiring SMB	FSx for Windows
+ML workloads needing high-speed file access	FSx for Lustre
+Mountable file storage with elasticity	EFS
+
+🔁 Comparison Summary Table
+
+| Feature          | Block Storage (EBS)   | File Storage (EFS / FSx)   | Object Storage (S3)         |
+| ---------------- | --------------------- | -------------------------- | --------------------------- |
+| Access Method    | Block-level via EC2   | File-level via NFS/SMB     | Object-level via REST APIs  |
+| OS Compatibility | Like local disk       | POSIX / Windows compatible | App-specific (HTTP-based)   |
+| Scalability      | Up to TBs per volume  | Auto-scalable              | Virtually unlimited         |
+| Sharing          | No (single EC2)       | Yes (multi-instance)       | Yes (global access)         |
+| Latency          | Low                   | Moderate                   | Higher                      |
+| Durability       | High (with snapshots) | High                       | **11 9s durability**        |
+| Cost             | Moderate to high      | Higher per GB              | Lowest (especially Glacier) |
+| Ideal Use Case   | Databases, OS         | Web apps, DevOps, ML       | Backups, Media, Data lakes  |
