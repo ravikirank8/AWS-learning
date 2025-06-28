@@ -1,0 +1,102 @@
+🔍 What is AWS DRS?
+
+🌩️ What is AWS Elastic Disaster Recovery?
+AWS Elastic Disaster Recovery (DRS) helps your servers or applications keep running in AWS if your main system fails (like your office server, data center, or cloud setup).
+
+Think of it as a live copy of your system that’s always ready in AWS —
+so if something goes wrong (like hardware failure, cyberattack, fire, or power outage), you can switch to AWS in minutes and continue working.
+
+💡 Why Use AWS DRS?
+It helps you:
+
+Avoid downtime and customer impact
+Save costs (no need to run full backups 24/7)
+Recover apps in minutes, not hours or days
+Test your disaster recovery plan safely
+
+🏢 Real-World Example: FinTech Company
+Let’s say a FinTech company runs its main software from a data center in Mumbai:
+
+One server runs the app
+Another server runs the database
+
+They’re worried about:
+What if their data center goes down?
+How fast can they get back online
+How much data could be lost?
+
+✅ How AWS DRS Helps (Step-by-Step)
+🔹 Step 1: Set Up DRS
+They install a small AWS agent on each server. This agent continuously copies the data to AWS — every few seconds — without slowing down their servers.
+
+This means there’s a live backup of their systems in AWS, always up to date.
+🔹 Step 2: Prepare AWS Recovery Settings
+In the AWS Console, they:
+
+Pick what server type to use if recovery is needed
+Set up networking (like VPC and subnets)
+Add any setup scripts needed after recovery
+
+🔹 Step 3: Test a Disaster Recovery Drill
+They click “Test Recovery” in AWS.
+
+AWS launches a copy of the server
+They check: Is the app working? Is the database working?
+Once done, they shut it down. AWS only charges for what was used during the test.
+
+✅ No disruption to live systems!
+
+🔹 Step 4: Actual Disaster Happens 😱
+Let’s say a flood hits their data center and everything shuts down.
+
+They log into AWS and click “Recover Servers.”
+Within minutes, AWS launches the live copies of the servers
+Their team and customers can use the system — business continues!
+They can update DNS (like Route 53) so that users automatically go to the AWS version.
+
+🔹 Step 5: Go Back to Normal (Failback)
+Once their original data center is fixed:
+
+They reinstall the servers on-site
+Use the AWS tool to copy data back from AWS to the original servers
+Then, they shut down the AWS setup to save costs
+
+🔐 Is It Safe?
+Yes. AWS DRS:
+
+Encrypts everything
+Keeps an audit trail of activity
+Meets certifications like ISO, HIPAA, and PCI
+
+💸 What Does It Cost?
+You pay for:
+
+The AWS storage for the backup copy
+A small staging server
+Actual cost only increases when you run recovery servers
+So, you save money because the backup system is not running all the time — only when needed.
+
+🧠 In Simple Terms:
+Think of AWS DRS like having a backup car parked and ready. You don't pay fuel for it daily — but if your main car breaks down, you can jump into the backup and drive right away. And once your main car is repaired, you switch back.
+
+
+🆚 AWS Backup vs AWS Elastic Disaster Recovery (DRS)
+
+| Feature                            | **AWS Backup**                                            | **AWS Elastic Disaster Recovery (DRS)**                |
+| ---------------------------------- | --------------------------------------------------------- | ------------------------------------------------------ |
+| **Purpose**                        | Backup & restore AWS services (files, databases, volumes) | Fast recovery of full servers & applications in AWS    |
+| **Type of protection**             | Periodic backups (snapshots)                              | Continuous block-level replication                     |
+| **RTO (Recovery Time Objective)**  | **Minutes to hours** (manual restore)                     | **Seconds to minutes** (automatic boot in AWS)         |
+| **RPO (Recovery Point Objective)** | **Hours to daily** (depending on schedule)                | **Seconds** (near-zero data loss)                      |
+| **Granularity**                    | Backup/restore individual resources (EBS, RDS, EFS, etc.) | Recover full servers or workloads (including OS + app) |
+| **Use cases**                      | Long-term backup, compliance, data archiving              | Fast disaster recovery for critical apps               |
+| **Supports On-Prem Sources?**      | **Yes**, via Storage Gateway                              | **Yes**, native agent installed on any machine         |
+| **Cross-region/cross-account?**    | Yes (manual or automatic vault copy)                      | Yes (built-in support for cross-region failover)       |
+| **DR testing?**                    | Limited (restore resource manually)                       | Full-scale DR drills supported (test instance launch)  |
+| **Automation Level**               | High (via backup plans, policies)                         | High (agent, launch templates, auto-recovery)          |
+| **Pricing**                        | Based on snapshot size, frequency, retention              | Based on staging storage + recovery EC2 usage          |
+| **Restores OS / App Configs?**     | ❌ No (data only — you reconfigure manually)               | ✅ Yes (entire system image, like a clone)              |
+| **Typical Restore Time**           | 10–60+ minutes per resource                               | 5–10 minutes for full system                           |
+| **Cold storage / Archiving?**      | ✅ Yes (long-term, lifecycle rules)                        | ❌ No (focus is fast recovery, not storage efficiency)  |
+| **Supported Services**             | EBS, RDS, EFS, DynamoDB, S3, FSx, Storage Gateway         | EC2, physical servers, VMware, Hyper-V                 |
+| **Compliance/Regulations**         | Yes (SOC, HIPAA, PCI, etc.)                               | Yes (SOC, HIPAA, PCI, etc.)                            |
