@@ -1,3 +1,16 @@
+| Feature          | Block Storage (EBS)   | File Storage (EFS / FSx)   | Object Storage (S3)         |
+| ---------------- | --------------------- | -------------------------- | --------------------------- |
+| Access Method    | Block-level via EC2   | File-level via NFS/SMB     | Object-level via REST APIs  |
+| OS Compatibility | Like local disk       | POSIX / Windows compatible | App-specific (HTTP-based)   |
+| Scalability      | Up to TBs per volume  | Auto-scalable              | Virtually unlimited         |
+| Sharing          | No (single EC2)       | Yes (multi-instance)       | Yes (global access)         |
+| Latency          | Low                   | Moderate                   | Higher                      |
+| Durability       | High (with snapshots) | High                       | **11 9s durability**        |
+| Cost             | Moderate to high      | Higher per GB              | Lowest (especially Glacier) |
+| Ideal Use Case   | Databases, OS         | Web apps, DevOps, ML       | Backups, Media, Data lakes  |
+
+
+
 🔷 1. BLOCK STORAGE
 Block storage divides data into fixed-size blocks and stores them individually. Each block has its own unique address and can be accessed directly (without a file path).
 
