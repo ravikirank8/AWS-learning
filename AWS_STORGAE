@@ -1,0 +1,77 @@
+🔷 1. BLOCK STORAGE
+Block storage divides data into fixed-size blocks and stores them individually. Each block has its own unique address and can be accessed directly (without a file path).
+
+Amazon EBS (Elastic Block Store)
+
+➤ Use Cases:
+Databases (SQL/NoSQL) – MySQL, PostgreSQL, MongoDB
+Boot volumes for EC2 Linux/Windows
+Transactional workloads with high IOPS requirements (e.g., financial systems)
+Low-latency access for block-level apps
+
+➤ When to Pick:
+When performance and low latency are critical
+When you need to attach storage to an individual EC2 instance
+For stateful applications that require disk-like behavior
+
+➤ Key Features:
+Low-latency access
+Persistent, durable storage
+Attached to a single EC2 instance at a time (like a virtual hard disk)
+Supports SSD and HDD-backed volumes
+Offers snapshots, encryption, IOPS provisioning
+
+➤ Pros:
+✅ High performance and low latency
+✅ Fine-grained control over data (especially needed by databases and OS-level apps)
+✅ Persistent storage even after EC2 termination (if configured)
+
+➤ Cons:
+❌ Tightly coupled to EC2 – can't share easily between instances
+❌ Limited scalability – storage is constrained to instance size and EBS limits
+❌ Not natively accessible over a network like shared file systems
+
+================
+
+🔷 2. FILE STORAGE (File System-based)
+➤ Definition:
+File storage uses a hierarchical structure (folders/directories/files). It’s accessible over network protocols like NFS, SMB, and allows shared access.
+
+Amazon EFS (Elastic File System) – Linux-based
+
+Amazon FSx:
+FSx for Windows File Server – for SMB/Windows apps
+FSx for Lustre – for high-performance computing
+
+
+➤ Use Cases:
+Web servers sharing media or code
+Content management systems (CMS)
+Shared home directories
+Lift-and-shift Windows applications using FSx for Windows
+High-performance computing (HPC) with FSx for Lustre
+
+➤ When to Pick:
+When multiple compute instances need shared access
+When you're using legacy applications expecting file system semantics
+For machine learning, media rendering, or dev/test environments
+
+➤ Key Features:
+Shared, concurrent access
+Standard POSIX or SMB file system interface
+Managed scalability
+Integrated with on-premises or hybrid architectures
+
+➤ Pros:
+✅ Multiple EC2 instances can share the same file system
+✅ Familiar file/directory structure for apps
+✅ Managed scalability (especially EFS)
+✅ Elastic – grow/shrink as needed
+✅ Cross-AZ mountable (EFS)
+
+➤ Cons:
+❌ Higher latency than block storage
+❌ More expensive than object storage
+❌ Protocol-dependent performance limitations (NFS/SMB)
+
+===================
