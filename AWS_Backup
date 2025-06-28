@@ -156,3 +156,14 @@ Access control via IAM policies
 Audit trails through CloudTrail
 
 Compliance-ready (SOC 1, 2, 3, ISO 27001, GDPR, HIPAA)
+
+
+| Element               | Architect’s Consideration                        |
+| --------------------- | ------------------------------------------------ |
+| Backup Scope          | Which AWS resources need coverage?               |
+| Frequency & Retention | RPO/RTO requirements + Cost                      |
+| Compliance            | Regulations (HIPAA, SOX, etc.)                   |
+| Multi-Region          | Is cross-region backup needed for DR?            |
+| Security              | Use of KMS, IAM, and vault-level access controls |
+| Monitoring            | How are backup jobs monitored and alerted?       |
+
