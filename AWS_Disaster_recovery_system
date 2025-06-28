@@ -100,3 +100,32 @@ Think of AWS DRS like having a backup car parked and ready. You don't pay fuel f
 | **Cold storage / Archiving?**      | ✅ Yes (long-term, lifecycle rules)                        | ❌ No (focus is fast recovery, not storage efficiency)  |
 | **Supported Services**             | EBS, RDS, EFS, DynamoDB, S3, FSx, Storage Gateway         | EC2, physical servers, VMware, Hyper-V                 |
 | **Compliance/Regulations**         | Yes (SOC, HIPAA, PCI, etc.)                               | Yes (SOC, HIPAA, PCI, etc.)                            |
+
+
+
+🎯 When to Use Which?
+✅ Use AWS Backup when:
+
+You want scheduled backups of AWS services like RDS, EBS, EFS, or DynamoDB.
+You need to retain backups for months or years (for legal or compliance reasons).
+You are okay with manual restores or slower recovery times.
+Your focus is data protection more than quick recovery.
+
+📘 Example:
+Back up RDS databases every night, retain for 7 years for compliance.
+
+✅ Use AWS DRS when:
+You need very fast recovery (RTO < 15 mins) of entire servers.
+You need to recover operating systems, apps, configs, and data together.
+You are protecting on-prem workloads, VMware, or EC2 instances.
+
+Your focus is on keeping apps running, not just backing up data.
+
+📘 Example:
+Protect your on-prem financial app server so it can be launched in AWS instantly in case of fire, flood, or ransomware.
+
+🧠 Architect’s Tip:
+Use both together:
+
+AWS DRS for mission-critical servers needing fast recovery
+AWS Backup for long-term, cost-efficient data retention
