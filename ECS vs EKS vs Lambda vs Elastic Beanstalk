@@ -1,0 +1,137 @@
+| Feature / Service          | Elastic Beanstalk                        | Amazon ECS                             | Amazon EKS                               | AWS Lambda                                |
+| -------------------------- | ---------------------------------------- | -------------------------------------- | ---------------------------------------- | ----------------------------------------- |
+| **Type**                   | Platform as a Service (PaaS)             | Container Orchestration (AWS-managed)  | Kubernetes Orchestration (fully managed) | Serverless Functions                      |
+| **Best for**               | Web apps, APIs                           | Containerized microservices/apps       | Large-scale container orchestration      | Event-driven functions, short-lived tasks |
+| **Infrastructure Control** | Partial (custom EC2 config allowed)      | Full (Fargate or EC2 launch types)     | Full (but complex setup)                 | No infrastructure to manage               |
+| **Scaling**                | Auto Scaling (EC2-based)                 | Auto-scaling for tasks and services    | Horizontal Pod Autoscaling               | Auto-scales by default                    |
+| **Startup Time**           | Moderate (EC2-based)                     | Fast (depends on launch type)          | Slower startup unless optimized          | Very fast (ms to sec)                     |
+| **Cost Model**             | Pay for EC2 + other resources            | EC2 or Fargate-based                   | EC2 or Fargate-based                     | Pay per execution time                    |
+| **Deployments**            | Upload code or zip file                  | Container images (Docker)              | Container images (Docker, Helm, etc.)    | Function code or container image          |
+| **Monitoring**             | Built-in (CloudWatch + Health Dashboard) | CloudWatch + Container Insights        | CloudWatch + Prometheus/Grafana          | CloudWatch Logs                           |
+| **Complexity**             | Low                                      | Medium                                 | High                                     | Very Low                                  |
+| **Flexibility**            | Medium (custom environments)             | High (custom networks, policies, etc.) | Very High (Kubernetes-native)            | Limited (stateless functions only)        |
+| **Use in Monoliths?**      | ✅ Yes                                    | ✅ Yes                                  | ✅ Yes                                    | 🚫 No (stateless functions only)          |
+| **Persistent Workloads?**  | ✅ Yes                                    | ✅ Yes                                  | ✅ Yes                                    | 🚫 No (short-lived only)                  |
+
+📍 Where to Use Each – Solution Architect View
+🟢 Elastic Beanstalk
+Use When:
+
+You need fast deployment of a Java, Python, Node.js, PHP, .NET web app
+
+Your app is monolithic or simple 2-3 tier
+
+Your team is not deeply experienced in cloud infrastructure
+
+You want managed EC2 + scaling + monitoring
+
+Avoid When:
+
+You are building containerized or microservice-based systems
+
+You need multi-region or multi-AZ control at deep level
+
+🔵 Amazon ECS (Elastic Container Service)
+Use When:
+
+You are deploying containerized microservices
+
+You want full control over networking, IAM, storage
+
+You want to use Fargate (serverless containers) or EC2
+
+You want simpler orchestration than Kubernetes
+
+Avoid When:
+
+Your team lacks Docker/container knowledge
+
+You don’t need containers or microservices
+
+🟣 Amazon EKS (Elastic Kubernetes Service)
+Use When:
+
+Your team uses Kubernetes or needs a portable, cloud-agnostic container platform
+
+You have large, complex microservices or multi-team dev ops environments
+
+You need advanced features like:
+
+Service Mesh
+
+Custom controllers
+
+Kubernetes-native tooling
+
+Avoid When:
+
+Your team has no Kubernetes expertise
+
+You don’t need that level of control (ECS or Fargate is easier)
+
+🟡 AWS Lambda
+Use When:
+
+You’re building event-driven, serverless workloads (e.g. API, S3 events, CRON)
+
+You need to process small jobs: REST APIs, data transformations, etc.
+
+You want to pay only for what you use (no idle cost)
+
+Avoid When:
+
+Your app is stateful or runs long (>15 minutes)
+
+You need fine-grained control over runtime or networking
+
+You have heavy-duty, complex services
+
+⚠️ Things to Consider Before Choosing (For Production)
+🔍 1. Operational Complexity
+Elastic Beanstalk: Very simple
+
+ECS: Medium (need Docker/container knowledge)
+
+EKS: High (need Kubernetes and cluster ops knowledge)
+
+Lambda: Very simple, but architectural change needed
+
+📈 2. Scalability & Performance
+Lambda: Scales almost instantly
+
+ECS/EKS: Scales well but requires warm containers
+
+Beanstalk: EC2-based, slower scaling
+
+💵 3. Cost Control
+Lambda: Most cost-effective at small scale
+
+ECS Fargate: Predictable cost, no idle infra
+
+EKS: More expensive to operate (EKS fee + infra)
+
+Beanstalk: Cost tied to EC2 instances and related AWS services
+
+🔐 4. Security & Isolation
+All support IAM, VPC, encryption, etc.
+
+EKS/ECS give more granular network & policy control
+
+🔁 5. CI/CD Integration
+All integrate with CodePipeline, GitHub, etc.
+
+ECS/EKS allow complex release strategies (e.g., canary, blue/green)
+
+
+🧠 Final Recommendations (Cheat Sheet)
+
+
+| Use Case                            | Recommended Service      |
+| ----------------------------------- | ------------------------ |
+| Quick deploy of Java/Python app     | Elastic Beanstalk        |
+| Microservices using containers      | Amazon ECS               |
+| Large-scale container orchestration | Amazon EKS               |
+| Event-driven or short-lived jobs    | AWS Lambda               |
+| Lift-and-shift monolithic app       | Elastic Beanstalk or ECS |
+| Stateless APIs with low traffic     | AWS Lambda               |
+| High-performance container app      | ECS with Fargate or EKS  |
