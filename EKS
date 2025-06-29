@@ -1,0 +1,86 @@
+🔹 1. What is AWS EKS?
+Amazon Elastic Kubernetes Service (EKS) is a managed Kubernetes service that makes it easy to run Kubernetes on AWS without managing your own control plane.
+
+Fully managed control plane (scaling, patching, upgrades, HA).
+
+Supports native Kubernetes (vanilla experience).
+
+Integrates with AWS services (IAM, VPC, CloudWatch, ALB, etc.).
+
+Can be deployed on:
+
+EC2 (self-managed worker nodes)
+
+Fargate (serverless compute)
+
+On-prem (via EKS Anywhere)
+
+🔹 2. EKS Architecture Overview
+🔸 Control Plane:
+Managed by AWS
+
+Runs across 3 AZs for HA
+
+Includes etcd, API server, scheduler, controller manager
+
+You don’t pay per EC2 instance for control plane
+
+🔸 Worker Nodes:
+Self-managed EC2 (via Node Groups)
+
+Managed Node Groups (auto-scaling, lifecycle management)
+
+Fargate (serverless, pay-per-pod)
+
+
+🔹 3. When to Use EKS (vs ECS)
+| **Use EKS when**                         | **Use ECS when**                    |
+| ---------------------------------------- | ----------------------------------- |
+| You need **Kubernetes portability**      | You want **AWS-native simplicity**  |
+| Teams have **Kubernetes expertise**      | Teams want **minimal ops overhead** |
+| Hybrid/multi-cloud required              | Fully on AWS                        |
+| Need custom scheduling/pod-level control | Task-level simplicity is enough     |
+| Third-party Kubernetes tooling           | Tight AWS integration only          |
+
+
+🔹 4. Production-Ready Considerations for EKS
+✅ Cluster Setup
+Use Private VPC Endpoints for control plane
+
+Enable Logging (API, audit, controller logs to CloudWatch)
+
+Separate Dev/Prod clusters or use Namespaces with strict RBAC
+
+✅ Security
+Use IAM Roles for Service Accounts (IRSA) for least privilege access
+
+Implement RBAC for granular user access
+
+Use Pod Security Policies or OPA/Gatekeeper
+
+Enable Secrets encryption using KMS
+
+✅ Networking
+Choose between VPC CNI, Calico, or Cilium
+
+Plan for IP exhaustion (each pod gets a VPC IP with VPC CNI)
+
+Use ENIConfig for multi-subnet allocation
+
+✅ Scalability
+Use Cluster Autoscaler for EC2
+
+Use Karpenter for smarter, faster node provisioning
+
+Fargate profiles for serverless, smaller workloads
+
+✅ Monitoring & Logging
+Use CloudWatch Container Insights, Prometheus/Grafana
+
+Use Fluent Bit or Fluentd for logs
+
+Set up Alerts for node/pod failures, high CPU, memory
+
+🟨 EKS is more expensive if you're using many small clusters. ECS is cheaper and simpler, but less flexible.
+
+
