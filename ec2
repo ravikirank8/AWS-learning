@@ -1,0 +1,50 @@
+Amazon EC2 is a foundational AWS service that provides virtual servers in the cloud (called instances) to run your applications.
+
+In simpler terms, EC2 lets you rent compute capacity (CPU, memory, network) by the hour or second, scaling up and down dynamically.
+
+🧩 2. Core Components of EC2
+| **Component**                   | **Description**                                                                                    |
+| ------------------------------- | -------------------------------------------------------------------------------------------------- |
+| **AMI (Amazon Machine Image)**  | Pre-packaged template for launching instances (OS, apps, configs). Example: Amazon Linux 2023 AMI. |
+| **Instance Types**              | Different combinations of CPU, RAM, network, storage optimized for workloads.                      |
+| **Instance Purchasing Options** | On-Demand, Reserved, Spot, Savings Plans. (More later.)                                            |
+| **EBS (Elastic Block Store)**   | Persistent disk storage attached to instances.                                                     |
+| **Instance Store**              | Ephemeral (temporary) storage physically attached to the host. Data lost when stopped.             |
+| **Security Groups**             | Virtual firewall controlling inbound/outbound traffic.                                             |
+| **Key Pairs**                   | SSH credentials for login.                                                                         |
+| **Elastic IP**                  | Static public IP address.                                                                          |
+| **Placement Groups**            | Control instance placement for performance (Cluster, Spread, Partition).                           |
+| **Elastic Load Balancer (ELB)** | Distributes traffic across multiple instances for high availability.                               |
+| **Auto Scaling Groups**         | Automatically launch/terminate instances to meet demand.                                           |
+| **CloudWatch**                  | Monitoring and logging metrics.                                                                    |
+| **User Data**                   | Bootstrap script that runs on first boot (e.g., install packages).                                 |
+
+
+🏷️ 3. Instance Types and Families
+EC2 offers many instance families. Think of them like car types—sedans, trucks, sports cars—optimized for different uses.
+
+Here are the main families:
+
+| **Family**                | **Optimized For**               | **Example Use Case**                        |
+| ------------------------- | ------------------------------- | ------------------------------------------- |
+| **General Purpose**       | Balanced compute/memory/network | Web servers, app servers (t3, t4g, m5, m6i) |
+| **Compute Optimized**     | High CPU performance            | Batch processing, gaming servers (c6i, c7g) |
+| **Memory Optimized**      | High RAM                        | Databases, analytics workloads (r6i, x2idn) |
+| **Storage Optimized**     | High disk throughput or IOPS    | Data warehousing, NoSQL (i4i, im4gn)        |
+| **Accelerated Computing** | GPUs or FPGAs                   | ML training, video rendering (p4, g5, f1)   |
+
+Solution Architect Tip:
+Always choose instance types based on workload profiles. Use Compute Optimized for CPU-bound workloads, Memory Optimized for large in-memory datasets.
+
+💰 4. Purchasing Options (Pricing Models)
+| Pricing Model               | Description                     | When to Use                      | Cost Efficiency         |
+| --------------------------- | ------------------------------- | -------------------------------- | ----------------------- |
+| **On-Demand**               | Pay per hour/second             | Unpredictable workloads, testing | 💰💰💰 (most expensive) |
+| **Reserved Instances (RI)** | Commit for 1 or 3 years         | Stable, long-term workloads      | 💰 (up to 72% savings)  |
+| **Spot Instances**          | Bid unused capacity             | Fault-tolerant, batch jobs       | 💰💰 (up to 90% off)    |
+| **Savings Plans**           | Flexible commitment for compute | Changing instance types/families | 💰 (up to 66% savings)  |
+| **Dedicated Hosts**         | Physical server reservation     | Compliance, licensing control    | 💰💰💰💰 (highest cost) |
+
+
+
+
