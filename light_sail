@@ -1,6 +1,33 @@
 🧠 What is AWS Lightsail?
 
 
+                                  Start
+                                    |
+              +---------------------+---------------------+
+              |                                           |
+   Do you need deep AWS integration, custom VPC, IAM,    |
+        granular networking, or full OS control?         |
+              |                                           |
+            Yes                                          No
+              |                                           |
+        +-----+-----+                        Do you want fast, simple
+        |           |                        deployment of a web app?
+ Use EC2        Is your app                   (e.g., Node, Java, PHP)
+                web-based?                            |
+        |           |                                 |
+      No           Yes                               Yes
+   (e.g., ML,    Do you want AWS to           +-------+-------+
+    legacy)      manage scaling, OS,          |               |
+               and load balancers?       Use Elastic      Use Lightsail
+                     |                   Beanstalk         (Basic sites)
+               +-----+-----+                                   
+               |           |
+             Yes          No
+          Use Elastic   Use EC2
+          Beanstalk     (Custom web infra)
+
+
+
 | Component         | Description                                                                        |
 | ----------------- | ---------------------------------------------------------------------------------- |
 | **Instances**     | VPS with a fixed monthly price. Linux/Windows OS with optional pre-installed apps. |
