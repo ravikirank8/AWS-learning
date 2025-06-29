@@ -1,0 +1,82 @@
+🔹 What is an Elastic Network Interface (ENI)?
+An Elastic Network Interface (ENI) is a virtual network card that can be attached to an EC2 instance within a VPC (Virtual Private Cloud). It includes:
+
+A primary private IPv4 address.
+
+One or more secondary private IPv4 addresses.
+
+One or more Elastic IP addresses (for public access).
+
+One MAC address.
+
+One or more security groups.
+
+A source/destination check flag.
+
+A description.
+
+A device index (primary or secondary ENI).
+
+ENIs provide network connectivity for EC2 instances and can be attached or detached at any time, depending on the instance's state.
+
+🔹 Diagrams for Common Patterns
+          Subnet-A (AZ-a)                  Subnet-A (AZ-a)
+       +-------------------+           +-------------------+
+       |   EC2-A (failed)  |  ENI  --> |   EC2-B (standby) |
+       +-------------------+           +-------------------+
+
+
++-------------------+
+|    EC2 Instance   |
+|-------------------|
+| eth0 (public)     | --> Public Subnet (Internet access)
+| eth1 (private)    | --> Private Subnet (DB/internal)
++-------------------+
+
+
+🔹 Types of ENIs
+| Type                                | Description                                                                                         |
+| ----------------------------------- | --------------------------------------------------------------------------------------------------- |
+| **Primary ENI (eth0)**              | Automatically created when an instance is launched.                                                 |
+| **Secondary ENI (eth1, eth2, ...)** | Manually created and attached to instances. Used for advanced networking.                           |
+| **Trunk ENI**                       | Used with **ENI trunking**, often for container-based workloads like ECS with high density of ENIs. |
+
+
+| Feature                                             | Description                                     |
+| --------------------------------------------------- | ----------------------------------------------- |
+| **ENI = virtual NIC**                               | With IPs, MAC, SGs                              |
+| **Attached to EC2**                                 | Or Lambda, ECS, etc.                            |
+| **Scalable and Movable**                            | Within same AZ                                  |
+| **Used for Security, Redundancy, Multi-Networking** | Yes                                             |
+| **Limitations**                                     | Subnet/AZ-bound, IP limits, instance ENI limits |
+
+
+
+🔹 ENI Use Cases in Solution Architecture
+1. High Availability and Failover
+You can pre-create ENIs and attach them to another instance during failover. This allows quick failover without DNS propagation delay.
+
+✅ Use Case: Move an ENI from a failed EC2 instance to a standby instance in the same AZ.
+
+2. Multiple Network Interfaces for Multi-VPC or Multi-Subnet Communication
+Instances can be connected to multiple subnets (even in different VPCs via Transit Gateway + VPC peering), allowing isolation of traffic.
+
+✅ Use Case: An EC2 instance connected to a public subnet for internet access (eth0), and a private subnet for database traffic (eth1).
+
+3. Security Group Separation
+Each ENI can have different security groups, allowing an instance to serve different functions securely.
+
+✅ Use Case: Web traffic (eth0) has open ports, while database traffic (eth1) is locked down to only specific sources.
+
+4. Low-level Network Appliance or Firewall
+You can create an EC2-based network appliance that inspects or routes traffic by enabling source/destination check = false on the ENI.
+
+✅ Use Case: Build a custom NAT, firewall, or proxy with multiple ENIs (one in public, one in private subnet).
+
+5. ECS Tasks (ENI-per-task mode)
+In AWS ECS (Elastic Container Service) with awsvpc network mode, each container/task can get its own ENI for direct VPC integration.
+
+✅ Use Case: Containers that need isolation, separate IPs, and security groups (common in microservices).
+
+6. ENI Trunking with Nitro-based EC2
+Allows attachment of hundreds of ENIs to a single instance (via trunk interface). Great for network appliances or container hosts needing high density of interfaces.
