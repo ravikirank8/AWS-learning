@@ -1,4 +1,5 @@
 🚀 What is AWS VPC?
+
 AWS VPC is like building your own private data center inside AWS Cloud.
 
 You decide:
@@ -12,3 +13,104 @@ Who can enter which room (security rules)
 Who can access the internet, and how
 
 AWS gives you a big, empty space (a VPC), and you design how everything connects and communicates.
+
+classless Inter-Domain Routing
+
+🧱 Components of VPC (Plain Technical Explanation)
+1. VPC CIDR Block
+It’s the IP range you reserve for your network, like 10.0.0.0/16.
+
+This tells AWS: “Give me 65,536 private IP addresses to work with.”
+
+👉 This is your full network space.
+
+2. Subnets
+You break your VPC into smaller sections called subnets.
+
+Two main types:
+
+Public Subnet: Can talk to the internet
+
+Private Subnet: Cannot talk to the internet directly
+
+👉 Think of public subnet like a lobby, and private subnet like a locked office room.
+
+3. Route Tables
+These are the rules for how traffic flows inside your VPC.
+
+Example: Public subnet has a rule to send internet traffic to the Internet Gateway.
+
+👉 Like a GPS that tells where traffic should go.
+
+4. Internet Gateway (IGW)
+This is the door that connects your VPC to the internet.
+
+Needed if your servers (like a website) need to be accessible from the outside world.
+
+👉 Think of it as your VPC’s front gate to the internet.
+
+5. NAT Gateway
+NAT means "Network Address Translation".
+
+It allows private servers to access the internet (for software updates), but blocks incoming connections from the internet.
+
+👉 Like a one-way door: inside servers can go out, but outsiders can’t come in.
+
+6. Security Groups
+These are like firewalls attached to individual servers.
+
+They decide who can talk to your server and on what ports.
+
+👉 Like giving each server its own visitor list.
+
+7. Network ACLs
+These are firewalls for subnets (groups of servers).
+
+They can block traffic from certain IPs or allow only specific ones.
+
+👉 Like a building entrance that checks every visitor.
+
+8. Elastic IP
+A static public IP address that doesn’t change.
+
+You assign this to things like a NAT Gateway or a Bastion Host.
+
+👉 Like reserving a permanent phone number for your server.
+
+9. Bastion Host
+A special EC2 server in the public subnet that you can SSH into.
+
+From there, you connect to private servers inside your VPC.
+
+👉 Like a security checkpoint: you enter here before going inside.
+
+10. VPC Peering
+Connect two VPCs privately.
+
+Servers in both VPCs can talk to each other using internal IPs.
+
+👉 Like connecting two offices with a private tunnel.
+
+11. Transit Gateway
+A central router that connects multiple VPCs and even on-premises data centers.
+
+Better than peering if you have lots of VPCs.
+
+👉 Like a highway junction for many roads.
+
+12. VPC Endpoints
+Allows your VPC to access AWS services like S3, DynamoDB without using the internet.
+
+👉 Like creating a private door from your office to the AWS service building.
+
+13. PrivateLink
+Lets you privately access services in another VPC (even another AWS account), without going over the internet.
+
+👉 Like a direct fiber cable between two buildings inside AWS.
+
+14. VPC Flow Logs
+These capture all the network activity in your VPC.
+
+Useful for troubleshooting and security audits.
+
+👉 Like CCTV logs of who entered and exited your office.
