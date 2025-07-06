@@ -1,0 +1,14 @@
+🚀 What is AWS VPC?
+AWS VPC is like building your own private data center inside AWS Cloud.
+
+You decide:
+
+What IP address range to use (like the street address for your network)
+
+How many rooms (subnets) to create
+
+Who can enter which room (security rules)
+
+Who can access the internet, and how
+
+AWS gives you a big, empty space (a VPC), and you design how everything connects and communicates.
