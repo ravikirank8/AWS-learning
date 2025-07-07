@@ -1,0 +1,4 @@
+Automatic DNS Entries: Private IP addresses are automatically mapped to DNS entries.
+AWS DNS Server Access: The DNS servers can be accessed at the second IP in the VPC CIDR block or via 169.254.169.253.
+Enable DNS Hostnames: Necessary to assign public DNS hostnames to instances with public IP addresses.
+Enable DNS Support: Must be active for the VPC to resolve DNS queries using AWS-provided servers.
