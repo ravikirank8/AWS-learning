@@ -2,3 +2,141 @@ Automatic DNS Entries: Private IP addresses are automatically mapped to DNS entr
 AWS DNS Server Access: The DNS servers can be accessed at the second IP in the VPC CIDR block or via 169.254.169.253.
 Enable DNS Hostnames: Necessary to assign public DNS hostnames to instances with public IP addresses.
 Enable DNS Support: Must be active for the VPC to resolve DNS queries using AWS-provided servers.
+
+
+Step	                            Action	                                                      Expected Outcome
+Dynamic IP Demonstration	        Stop and restart the instance	                      Public IP changes from 52.90.159.117 to a new value
+Allocating an Elastic IP	        Allocate a new Elastic IP in EC2 dashboard        	A static IP (e.g., 35.173.92.86) is assigned to your account
+Associating the Elastic IP	      Associate the Elastic IP with your instance	       The instance now consistently uses the Elastic IP
+Verifying Connectivity	          Ping the Elastic IP	                               Successful replies confirm connectivity
+Ensuring Elastic IP Persistence 	Reboot the instance	                              Elastic IP remains unchanged
+Releasing the Elastic IP	       Disassociate and release the Elastic IP	           Elastic IP is removed from your account
+
+
+
+
+
+
+🔐 What Are AWS Firewalls?
+In AWS, firewalls are used to control which traffic can go in and out of your cloud resources like EC2 instances or entire networks.
+
+There are two main tools you use for this in AWS:
+
+Security Groups
+
+Network ACLs (NACLs)
+
+Both help protect your cloud resources, but they work differently and are used for different reasons.
+
+🧱 1. Security Groups – Think of them as Bodyguards for EC2
+👉 What is it?
+A security group is like a gatekeeper for your EC2 instances (or databases, load balancers).
+
+It allows certain types of traffic in and out, based on rules you define.
+
+👉 How it works?
+Only allows traffic you approve (no “deny” rules).
+
+It’s stateful – means if someone is allowed in, AWS will automatically allow them back out.
+
+Example: If you allow traffic on port 80 (HTTP), return traffic is automatically allowed.
+
+👉 Where and when to use?
+Use it for specific resources like:
+
+EC2 servers
+
+RDS databases
+
+Load balancers (ALB/NLB)
+
+When you want to control access per resource.
+
+✅ Best Practice:
+Only open necessary ports (e.g., 22 for SSH, 80/443 for web).
+
+Don’t allow 0.0.0.0/0 (open to all) unless really needed.
+
+Group rules based on purpose (like WebSG, DBSG).
+
+🌐 2. NACLs (Network Access Control Lists) – Think of them as Fence for Your Subnet
+👉 What is it?
+NACLs are like security fences for a group of machines (called a subnet).
+
+They control who can enter or leave a subnet.
+
+👉 How it works?
+NACLs have both allow and deny rules.
+
+It is stateless – means if you allow incoming traffic, you also have to allow outgoing traffic separately.
+
+Example: If you allow traffic IN on port 80, you also need to allow OUT traffic on port 80 (or the response port), otherwise it will be blocked.
+
+👉 Where and when to use?
+Use it at the subnet level when:
+
+You want to block certain IPs (bad actors).
+
+You want extra security on top of security groups.
+
+✅ Best Practice:
+Use NACLs for broad rules.
+
+Deny access to known bad IPs.
+
+Make sure both inbound and outbound rules are set correctly.
+
+
+🔁 Stateful vs Stateless (Key Difference)
+
+| Feature         | Security Group             | NACL                           |
+| --------------- | -------------------------- | ------------------------------ |
+| Works on        | Instance (like EC2)        | Subnet (group of EC2s)         |
+| Type            | Stateful (automatic reply) | Stateless (no automatic reply) |
+| Rules           | Allow only                 | Allow and Deny                 |
+| Direction setup | Inbound & Outbound         | Inbound & Outbound             |
+
+
+
+🧠 When to Use What? (Decision Flow)
+Q: Do I want to control traffic to a specific EC2 or RDS?
+→ Use Security Groups
+
+Q: Do I want to block an IP at the subnet level?
+→ Use NACLs
+
+Q: Do I want automatic return traffic (easier setup)?
+→ Use Security Groups
+
+Q: Do I want to apply rules to all machines in a subnet?
+→ Use NACLs
+
+Q: Do I need to deny a specific IP or port?
+→ Use NACLs
+
+
+💡 Example Scenario
+Let’s say you have a web application and a database:
+
+For the web server:
+
+Security Group: Allow 80/443 from the internet.
+
+NACL: Allow 80/443 from the internet, deny known bad IPs.
+
+For the database server:
+
+Security Group: Allow 3306 (MySQL) only from the web server.
+
+NACL: Allow MySQL port from web subnet, deny everything else.
+
+
+
+ Summary (In Simple Points)
+Security Groups = For individual servers (like EC2). They are stateful and easier to manage.
+NACLs = For entire subnets. They are stateless and give more control (like blocking IPs).
+
+Use both together for better security (defense-in-depth).
+
+Always allow only what’s necessary.
+Monitor traffic using VPC Flow Logs
