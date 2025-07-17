@@ -1,0 +1,75 @@
+🧭 What is Elastic Load Balancing (ELB)?
+Elastic Load Balancing is a fully managed AWS service that automatically distributes incoming application traffic across multiple targets (EC2, containers, IPs, Lambda)
+in one or more Availability Zones (AZs). It ensures high availability, fault tolerance, and scalability.
+
+🎯 Why Use ELB?
+Distribute traffic across healthy targets
+Improve fault tolerance by rerouting traffic
+Scale automatically with demand
+Secure traffic with SSL/TLS termination
+Integrate with Auto Scaling, WAF, CloudWatch, etc.
+
+🔍 ELB Types Comparison Table
+| Feature               | ALB (Layer 7)         | NLB (Layer 4)         | GWLB                  | CLB (Legacy)          |
+|-----------------------|------------------------|------------------------|------------------------|------------------------|
+| Protocols             | HTTP, HTTPS            | TCP, UDP, TLS          | All (via appliances)   | HTTP, HTTPS, TCP       |
+| Routing               | Path/Host-based        | IP/Port-based          | Transparent            | Basic                  |
+| Performance           | Good                   | Ultra-low latency      | Depends on appliance   | Moderate               |
+| Use Case              | Web apps, APIs         | Gaming, IoT, real-time | Security appliances    | Legacy apps            |
+| Lambda Support        | ✅                     | ❌                     | ❌                     | ❌                     |
+| WAF Support           | ✅                     | ❌                     | ❌                     | ❌                     |
+
+
+🧭 When to Use ELB (Solution Architect Mindset)
+✅ Use ALB when:
+You need advanced routing (path/host-based)
+You're building microservices or containerized apps
+You want WebSocket support or Lambda targets
+
+✅ Use NLB when:
+You need ultra-low latency and high throughput
+You're handling millions of requests per second
+You need static IP or Elastic IP support
+✅ Use GLB when:
+
+You want to deploy 3rd-party virtual appliances (e.g., firewalls, IDS/IPS)
+You need traffic mirroring or packet inspection
+❌ Avoid CLB unless:
+You’re maintaining legacy systems that require it
+
+🛠️ How to Use ELB (Steps)
+Choose Load Balancer Type (ALB/NLB/GLB)
+Define Listeners (e.g., HTTP on port 80)
+Create Target Groups (EC2, IPs, Lambda)
+Register Targets (instances or containers)
+Configure Health Checks
+Attach to Auto Scaling Group (optional)
+Test and Monitor via CloudWatch
+
+
+🌳 Decision Tree for Choosing AWS ELB (Markdown Format)
+
+Start
+ |
+ |-- Do you need HTTP/HTTPS routing?
+ |     |
+ |     |-- Yes --> Do you need path or host-based routing?
+ |     |               |
+ |     |               |-- Yes --> Use ALB (Application Load Balancer)
+ |     |               |
+ |     |               |-- No  --> Use CLB (Classic Load Balancer - legacy)
+ |     |
+ |     |-- No --> Do you need ultra-low latency or TCP/UDP support?
+ |                   |
+ |                   |-- Yes --> Use NLB (Network Load Balancer)
+ |                   |
+ |                   |-- No --> Do you need to inspect traffic with appliances?
+ |                                 |
+ |                                 |-- Yes --> Use GWLB (Gateway Load Balancer)
+ |                                 |
+ |                                 |-- No  --> Re-evaluate: ELB may not be needed
+
+
+
+
+🌳 Decision Tree for Choosing AWS ELB (Markdown Format)
