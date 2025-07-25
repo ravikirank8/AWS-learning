@@ -7,6 +7,18 @@
 | **EventBridge** | 🧠 **Smart Event Router**: Like an airport control tower routing flights to gates based on airline, priority, or destination.                    | Event bus that listens for events and routes them to correct AWS services (rules-based, decoupled integration). |
 
 
+🔁 Real-World Example Workflow (All Services Together)
+Imagine an e-commerce platform:
+
+Customer places order → Triggers an event.
+EventBridge picks up the "OrderPlaced" event and:
+Sends notification via SNS to warehouse & customer.
+Triggers a Lambda to update database.
+Sends order email using SES.
+Pushes task to SQS for inventory team to pick and pack asynchronously.
+This shows how all four services complement each other.
+
+
 ✅ What is AWS SNS (Simple Notification Service)?
 Amazon SNS is a fully managed publish/subscribe (pub/sub) messaging service that enables applications, microservices, or users to send notifications or messages
 to multiple subscribers (like email, SMS, Lambda, SQS, etc.).
