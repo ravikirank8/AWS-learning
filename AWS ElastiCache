@@ -116,3 +116,26 @@ You want persistent storage with relational querying (use RDS/Redshift)
 | Session Store          | ✅                 | ❌ (less reliable) |
 | Horizontal Scalability | ✅ (Cluster mode)  | ✅                 |
 | Pub/Sub                | ✅                 | ❌                 |
+
+🧩 What Is ElastiCache for Memcached?
+Amazon ElastiCache for Memcached is a fully managed, in-memory caching service based on the Memcached engine.
+
+It is ideal for simple, high-performance, ephemeral (non-persistent) key-value caching, such as:
+
+Caching query results,
+
+Offloading session state storage,
+
+Reducing latency on frequently accessed data.
+
+✅ Why Use Memcached?
+🔸 Use Case Characteristics:
+No persistence required (data loss on restart is acceptable)
+
+No replication or automatic failover needed
+
+Scale-out (horizontal scaling) is critical
+
+You need simple key-value lookups (strings only)
+
+
