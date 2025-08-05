@@ -19,11 +19,9 @@ Releasing the Elastic IP	       Disassociate and release the Elastic IP	        
 
 🔐 What Are AWS Firewalls?
 In AWS, firewalls are used to control which traffic can go in and out of your cloud resources like EC2 instances or entire networks.
-
 There are two main tools you use for this in AWS:
 
 Security Groups
-
 Network ACLs (NACLs)
 
 Both help protect your cloud resources, but they work differently and are used for different reasons.
@@ -31,59 +29,42 @@ Both help protect your cloud resources, but they work differently and are used f
 🧱 1. Security Groups – Think of them as Bodyguards for EC2
 👉 What is it?
 A security group is like a gatekeeper for your EC2 instances (or databases, load balancers).
-
 It allows certain types of traffic in and out, based on rules you define.
 
 👉 How it works?
 Only allows traffic you approve (no “deny” rules).
-
 It’s stateful – means if someone is allowed in, AWS will automatically allow them back out.
-
 Example: If you allow traffic on port 80 (HTTP), return traffic is automatically allowed.
 
 👉 Where and when to use?
 Use it for specific resources like:
-
 EC2 servers
-
 RDS databases
-
 Load balancers (ALB/NLB)
-
 When you want to control access per resource.
 
 ✅ Best Practice:
 Only open necessary ports (e.g., 22 for SSH, 80/443 for web).
-
 Don’t allow 0.0.0.0/0 (open to all) unless really needed.
-
 Group rules based on purpose (like WebSG, DBSG).
 
 🌐 2. NACLs (Network Access Control Lists) – Think of them as Fence for Your Subnet
 👉 What is it?
 NACLs are like security fences for a group of machines (called a subnet).
-
 They control who can enter or leave a subnet.
-
 👉 How it works?
 NACLs have both allow and deny rules.
-
 It is stateless – means if you allow incoming traffic, you also have to allow outgoing traffic separately.
-
 Example: If you allow traffic IN on port 80, you also need to allow OUT traffic on port 80 (or the response port), otherwise it will be blocked.
 
 👉 Where and when to use?
 Use it at the subnet level when:
-
 You want to block certain IPs (bad actors).
-
 You want extra security on top of security groups.
 
 ✅ Best Practice:
 Use NACLs for broad rules.
-
 Deny access to known bad IPs.
-
 Make sure both inbound and outbound rules are set correctly.
 
 
