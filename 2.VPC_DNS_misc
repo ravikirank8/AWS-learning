@@ -21,6 +21,12 @@ VPC is regional, but its subnets are AZ-specific (Availability Zones).
 🔸 Default VPC
 When you create an AWS account, AWS automatically gives you a default VPC in each region.
 
+| Setting                | Purpose                           | Default                             | Should You Enable?                  |
+| ---------------------- | --------------------------------- | ----------------------------------- | ----------------------------------- |
+| **enableDnsSupport**   | Allow VPC to resolve domain names | ✅ True                              | ✅ Always (unless custom resolver)   |
+| **enableDnsHostnames** | Assign DNS names to EC2 instances | ❌ (custom VPC) <br> ✅ (default VPC) | ✅ If you want DNS names or Route 53 |
+
+
 | Feature          | Default VPC                         |
 | ---------------- | ----------------------------------- |
 | Exists?          | Yes, in every region                |
