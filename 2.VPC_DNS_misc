@@ -19,7 +19,7 @@ VPC is regional, but its subnets are AZ-specific (Availability Zones).
 ❗ VPC does NOT span regions, only AZs within a region.
 
 🔸 Default VPC
-When you create an AWS account, AWS automatically gives you a default VPC in each region.
+When you create an AWS account, AWS automatically gives you a default VPC in each region..
 
 | Setting                | Purpose                           | Default                             | Should You Enable?                  |
 | ---------------------- | --------------------------------- | ----------------------------------- | ----------------------------------- |
