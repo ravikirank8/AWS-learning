@@ -1,3 +1,114 @@
+| Component                  | Purpose                                                      |
+| -------------------------- | ------------------------------------------------------------ |
+| **CIDR Block**             | Defines IP range of the VPC (e.g., `10.0.0.0/16`)            |
+| **Subnets**                | Divide VPC into logical zones (public or private)            |
+| **Route Tables**           | Decide how traffic flows (local, internet, NAT)              |
+| **Internet Gateway (IGW)** | Enables internet access to public subnets                    |
+| **NAT Gateway**            | Enables private subnets to access internet **outbound only** |
+| **Security Groups**        | Stateful firewalls per resource                              |
+| **NACLs**                  | Stateless firewalls per subnet                               |
+| **DHCP Options Set**       | Controls DNS name resolution settings                        |
+
+🔹 VPC and Regions
+Every VPC exists inside a single AWS region.
+
+You can create multiple VPCs per region (limit: 5 by default, can increase).
+
+VPC is regional, but its subnets are AZ-specific (Availability Zones).
+
+❗ VPC does NOT span regions, only AZs within a region.
+
+🔸 Default VPC
+When you create an AWS account, AWS automatically gives you a default VPC in each region.
+
+| Feature          | Default VPC                         |
+| ---------------- | ----------------------------------- |
+| Exists?          | Yes, in every region                |
+| Subnets          | 1 per AZ, already created           |
+| Internet access? | Yes, via attached Internet Gateway  |
+| Public IPs       | Automatically assigned to instances |
+| DNS Support      | Enabled by default                  |
+
+
+🔹 Public IP vs Private IP
+🔸 Private IP
+Always assigned to every EC2 instance (even in private subnets).
+Used for internal communication.
+
+Stays with the instance across reboots (unless replaced manually).
+🔸 Public IP
+Assigned only if in a public subnet + explicitly enabled.
+
+Used for internet access.
+Dynamic: Changes if you stop/start the instance (unless using Elastic IP).
+
+🔹 Does Public IP Get Assigned by Default?
+🔹 Does Public IP Get Assigned by Default?
+
+✅ How a Solution Architect Should Think
+
+
+Do you need a new network?
+ └── Yes → Create a VPC
+        ├── Need internet-facing apps?
+        │     ├── Yes → Create public subnet + IGW
+        │     └── No  → Private subnet + NAT Gateway (optional)
+        ├── Need fixed IP?
+        │     └── Use Elastic IP
+        ├── Need to connect to on-prem?
+        │     └── Use Site-to-Site VPN or Direct Connect
+        └── Want to allow DNS resolution?
+              ├── Yes → Enable DNS Support + DNS Hostnames
+
+
+| Question                                      | Architectural Reason                                                      |
+| --------------------------------------------- | ------------------------------------------------------------------------- |
+| Do I need internet access for this workload?  | If yes, place in public subnet + IGW. If no, keep private.                |
+| Should the instance be accessible externally? | Use public IP only if absolutely needed.                                  |
+| Should I keep the IP consistent?              | Assign Elastic IP.                                                        |
+| Is this VPC secure?                           | Use NACLs, SGs, and avoid overly permissive rules.                        |
+| Should I use default or custom VPC?           | Use **custom VPC** in production — more control.                          |
+| Should I isolate workloads?                   | Use **multiple subnets** and **multiple AZs**.                            |
+| Should I peer/connect with other networks?    | Consider **VPC peering**, **Transit Gateway**, or **VPN/Direct Connect**. |
+
+
+🔹 What is DNS in a VPC?
+DNS (Domain Name System) in a VPC allows your EC2 instances and other services to resolve:
+Private DNS names to private IPs (internal resolution)
+Public DNS names to public IPs (external resolution)
+
+📌 Summary Cheat Sheet (Exam-Ready)
+✅ enableDnsSupport = Allows EC2 to use VPC DNS resolver.
+✅ enableDnsHostnames = Gives EC2 DNS hostnames for public/private IPs.
+❗ Both must be true to assign public DNS names to EC2 instances with public IPs.
+🔐 Always design VPCs with DNS support in mind for internal and external name resolution.
+🔄 DNS changes can affect how instances communicate, especially with Route 53 private hosted zones or VPC peering.
+
+Route 53 private hosted zone names
+In other words:
+DNS in a VPC = name-to-IP translation inside your private AWS network.
+
+🔸 Why Is DNS Important in AWS?
+As a Solution Architect, you need to use DNS to:
+Avoid hardcoding IP addresses
+Enable service discovery
+Work with microservices, Lambda, ECS, EKS, etc.
+Use Route 53 for internal domain resolution
+Ensure VPC-peered resources can resolve names
+
+🔹 Two Main DNS Options in a VPC
+These options are VPC-level settings that control DNS behavior:
+
+| Option                 | Default                                                | Meaning                                                                             |
+| ---------------------- | ------------------------------------------------------ | ----------------------------------------------------------------------------------- |
+| **enableDnsSupport**   | `true`                                                 | Allows instances in the VPC to use **Amazon-provided DNS server**                   |
+| **enableDnsHostnames** | `false` (for custom VPC) <br> `true` (for default VPC) | Assigns **DNS hostnames** (like `ec2-1-2-3-4.compute-1.amazonaws.com`) to instances |
+
+
+
+
+
+
 Automatic DNS Entries: Private IP addresses are automatically mapped to DNS entries.
 AWS DNS Server Access: The DNS servers can be accessed at the second IP in the VPC CIDR block or via 169.254.169.253.
 Enable DNS Hostnames: Necessary to assign public DNS hostnames to instances with public IP addresses.
@@ -12,9 +123,53 @@ Verifying Connectivity	          Ping the Elastic IP	                           
 Ensuring Elastic IP Persistence 	Reboot the instance	                              Elastic IP remains unchanged
 Releasing the Elastic IP	       Disassociate and release the Elastic IP	           Elastic IP is removed from your account
 
+🔸 enableDnsSupport = true ✅
+"Can I resolve domain names inside this VPC?"
+If true → Instances can resolve DNS using AWS’s built-in DNS.
 
+If false → No DNS resolution works inside the VPC.
 
+🧠 Architect Insight:
+This is the core DNS engine switch.
+Keep it enabled always, unless you’re using custom DNS resolvers (rare).
 
+🔸 enableDnsHostnames = true ✅
+"Should AWS assign public DNS names to EC2 instances?"
+If true:
+
+Public IPs get public DNS names.
+Private IPs get private DNS names.
+
+If false:
+Even if EC2 has a public IP, no public DNS name is given.
+
+🧠 Architect Insight:
+Required if you want to SSH using ec2-xx-xx-xx-xx.compute.amazonaws.com
+Needed for internal name resolution
+Also required when using Route 53 private hosted zones
+
+🧪 Example Scenarios
+Example 1: Default VPC
+✅ enableDnsSupport = true
+
+✅ enableDnsHostnames = true
+
+✅ Outcome: EC2 gets both private and public DNS names.
+
+You can SSH into the instance using the DNS name.
+
+Example 2: Custom VPC for Internal App
+✅ enableDnsSupport = true
+
+❌ enableDnsHostnames = false (default)
+
+Outcome:
+
+EC2 gets a private IP, but no DNS hostname
+
+Can’t resolve internal service names easily
+
+➡️ Fix: Enable enableDnsHostnames via console, CLI, or Terraform
 
 
 🔐 What Are AWS Firewalls?
