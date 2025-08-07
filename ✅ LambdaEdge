@@ -1,0 +1,78 @@
+🔸 1. Understand the Primary Use of Each:
+| Service                  | Primary Use                                                  |
+| ------------------------ | ------------------------------------------------------------ |
+| **CloudFront**           | Global content delivery with edge caching                    |
+| **Lambda\@Edge**         | Run complex logic at edge (personalization, auth, redirects) |
+| **CloudFront Functions** | Lightweight request manipulations (headers, rewrites)        |
+
+🔸 2. Know When to Choose Which (Exam Gold)
+| Requirement/Scenario                                                | Choose                      |
+| ------------------------------------------------------------------- | --------------------------- |
+| You want to reduce latency by delivering content closer to users    | ✅ CloudFront                |
+| You need to inspect or modify requests/responses at edge            | ✅ Lambda\@Edge or Functions |
+| You need geo-based redirects or header manipulation                 | ✅ Lambda\@Edge              |
+| You want simple routing changes or token checks at low latency      | ✅ CloudFront Functions      |
+| You need external service/API access from edge (e.g., DynamoDB, S3) | ✅ Lambda\@Edge              |
+| You want sub-millisecond execution at low cost                      | ✅ CloudFront Functions      |
+| You want to invalidate cache when content updates                   | ✅ CloudFront                |
+| You want to deliver S3-hosted static site via HTTPS globally        | ✅ CloudFront                |
+
+🔸 3. CloudFront Internals – For TTL, Origin, Invalidation
+Origin: The backend (e.g., S3, ALB, EC2)
+
+TTL (Time-to-Live): Controls how long objects are cached at edge. Shorter TTL = more dynamic content.
+
+Invalidation: Used to forcibly expire cached objects before TTL ends (expensive if used excessively).
+
+Signed URLs / Cookies: Used for restricting access.
+
+📌 Exam Tip: If the business needs real-time updates, use short TTL + cache invalidation + versioned content.
+
+🔸 4. Security and Compliance
+Use CloudFront with WAF to prevent attacks like SQLi, XSS
+
+Use Signed URLs for paid/secure content
+
+Use Origin Access Control (OAC) to restrict direct access to S3
+
+Lambda@Edge for custom auth
+
+🔸 5. Cost Optimization Mindset
+| Service              | Cost Impact                                   |
+| -------------------- | --------------------------------------------- |
+| CloudFront           | Charged by data transfer + number of requests |
+| Lambda\@Edge         | More expensive than CloudFront Functions      |
+| CloudFront Functions | Cheapest for basic manipulation at edge       |
+📌 Exam Tip: For high-volume, low-complexity use cases (e.g., header rewrites), CloudFront Functions are preferred for cost-efficiency.
+
+
+🔸 6. Integration Patterns (Important in Architect Role)
+CloudFront + S3 = Static site hosting (SPA, images, documents)
+
+CloudFront + ALB/EC2 = Dynamic app delivery with caching
+
+CloudFront + Lambda@Edge = Dynamic personalization at edge
+
+CloudFront + WAF + Shield = Secured and resilient app delivery
+
+🔸 7. Common Exam Scenario-Based Questions
+✅ You need to customize content delivery based on the user's country—what should you use?
+Lambda@Edge (geo-based routing)
+
+✅ You want to serve a single-page app from S3 with global caching—what to use?
+CloudFront + S3 with static hosting
+
+✅ You need to route requests based on query string at the edge, but cost is a concern—what to use?
+CloudFront Functions
+
+✅ You want to prevent direct access to S3 files behind CloudFront—what to implement?
+Origin Access Control (OAC)
+
+🧠 Solution Architect Mindset Summary
+✅ Minimize Latency: Use CloudFront to cache near users.
+
+✅ Offload Origin: Use TTL, caching, and edge logic to reduce backend pressure.
+
+✅ Cost Optimization: Avoid Lambda@Edge for simple logic—use CloudFront Functions instead.
+
+✅ Security First: Always secure origins, validate requests, and integrate WAF.
