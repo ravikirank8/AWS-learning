@@ -1,0 +1,119 @@
+🔷 What is VPC Peering?
+VPC Peering allows two VPCs to communicate privately using private IPs, without using public internet, VPN, or Direct Connect.
+
+🧠 Think of it as a private tunnel between two VPCs.
+
+🧱 How VPC Peering Works (Architecture)
+[ VPC A - 10.0.0.0/16 ]                 [ VPC B - 192.168.0.0/16 ]
+          |                                        |
+          |---------- VPC Peering Connection ------|
+                         (Private IP Routing)
+
+
+Traffic stays inside AWS’s network (low latency, secure)
+
+Uses AWS backbone, not public internet
+
+No gateway or NAT required
+
+Works across:
+
+Same region (intra-region)
+
+Different regions (inter-region)
+
+Same or different AWS accounts
+
+✅ Key Features & Behavior
+| Feature                       | Behavior                                 |
+| ----------------------------- | ---------------------------------------- |
+| **No transitive routing**     | If A ↔ B and B ↔ C, A **cannot** reach C |
+| **No overlapping CIDR**       | Both VPCs must have **unique** IP ranges |
+| **Security groups supported** | Can allow inbound from peered VPC        |
+| **Routing table required**    | You must **manually add routes**         |
+| **DNS resolution supported**  | Optional; enable if needed               |
+| **Cross-account supported**   | Yes (VPCs in different accounts)         |
+| **Cross-region supported**    | Yes (Global VPC peering)                 |
+
+🔧 How to Set It Up
+Step-by-Step
+Request Peering
+From VPC A to VPC B (can be in same or another account)
+
+Accept Peering
+From target VPC (VPC B)
+
+Update Route Tables
+Each VPC must add route to the other’s CIDR
+
+(Optional) Enable DNS resolution between VPCs
+
+🔐 Security Best Practices
+| Action                            | Purpose                                 |
+| --------------------------------- | --------------------------------------- |
+| Only peer required VPCs           | Avoid flat, insecure network            |
+| Use route table filtering         | Avoid exposing entire CIDR              |
+| Enable flow logs                  | Monitor inter-VPC traffic               |
+| Don’t use peering for large-scale | Prefer **Transit Gateway** for 10+ VPCs |
+
+
+💲 VPC Peering Pricing
+🧠 This is a common exam question, so pay attention!
+| Region                               | Price                            |
+| ------------------------------------ | -------------------------------- |
+| **Intra-region** (same region)       | **Free** — no data transfer cost |
+| **Inter-region** (different regions) | **Paid per GB** transferred      |
+
+📊 Sample Inter-region Data Transfer Cost:
+| Example                      | Cost/GB (approx)   |
+| ---------------------------- | ------------------ |
+| US East ↔ US West            | \~\$0.01/GB        |
+| US ↔ APAC (India, Singapore) | \~\$0.02–\$0.05/GB |
+
+⚠️ VPC Peering Limitations
+| Limitation                        | Detail                                        |
+| --------------------------------- | --------------------------------------------- |
+| No transitive routing             | Must connect each VPC explicitly              |
+| Max peering connections           | Default 125 (can increase with limit request) |
+| Max routes per table              | 1000 (soft limit)                             |
+| Doesn’t support IPv6-only peering | Only dual-stack or IPv4                       |
+
+🧠 Real-World Thinking – Solution Architect POV
+| Scenario                       | Recommendation                                                |
+| ------------------------------ | ------------------------------------------------------------- |
+| 2-5 VPCs needing communication | Use VPC Peering                                               |
+| >10 VPCs                       | Use **Transit Gateway** instead                               |
+| Multi-account communication    | VPC Peering is OK, consider **Resource Access Manager (RAM)** |
+| Centralized networking         | Prefer **TGW** for hub-and-spoke design                       |
+
+🔁 VPC Peering vs. Transit Gateway (Comparison)
+| Feature                | VPC Peering       | Transit Gateway             |
+| ---------------------- | ----------------- | --------------------------- |
+| Transitive Routing     | ❌ No              | ✅ Yes                       |
+| Scalability            | Low (125)         | High (5000+)                |
+| Centralized management | ❌ No              | ✅ Yes                       |
+| Use case               | Point-to-point    | Hub-and-spoke               |
+| Pricing                | Intra-region free | Data processing fee applies |
+
+
+🌲 Decision Tree: Should You Use VPC Peering?
+Need to connect two VPCs privately?
+ └── Yes
+     ├── < 10 VPCs involved?
+     │     └── Use VPC Peering
+     │         ├── Same region?
+     │         │     └── Intra-region peering (Free)
+     │         └── Different region?
+     │               └── Inter-region peering (Charged per GB)
+     └── > 10 VPCs or complex topology?
+           └── Use Transit Gateway
+✅ Summary Table for Exam
+| Topic              | Detail                                             |
+| ------------------ | -------------------------------------------------- |
+| **What**           | Private link between 2 VPCs                        |
+| **Routing**        | Manual, no transitive                              |
+| **Region support** | Same and cross-region                              |
+| **Cost**           | Free (intra-region), charged per GB (inter-region) |
+| **CIDR**           | Must not overlap                                   |
+| **Setup**          | Request → Accept → Route Tables                    |
+| **Alt for scale**  | Use Transit Gateway for 10+ VPCs                   |
