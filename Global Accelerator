@@ -1,0 +1,70 @@
+🔹 What is It?
+AWS Global Accelerator (GA) improves global application availability and performance by routing user traffic through the AWS global network, not the public internet, to reach your application endpoints.
+
+🔹 Why Use Global Accelerator?
+| Benefit                                | Explanation                                                                 |
+| -------------------------------------- | --------------------------------------------------------------------------- |
+| 🌍 **Global Anycast IPs**              | Single static IP addresses that route users to the nearest healthy endpoint |
+| 🚀 **Improved Performance**            | Uses AWS backbone for faster and predictable routing                        |
+| 🔁 **Automatic Failover**              | Detects unhealthy endpoints and reroutes to healthy ones instantly          |
+| 📈 **Low Latency & High Availability** | Improves global connectivity for both TCP and UDP apps                      |
+🔹 How Global Accelerator Works
+You get 2 static Anycast IPs
+
+User connects to the nearest AWS edge location
+
+Traffic is routed via AWS private backbone to your regional endpoint (ALB, NLB, EC2, or EIP)
+
+If one region/endpoint fails, traffic is rerouted instantly
+
+✅ CloudFront vs Global Accelerator – Key Differences
+| Feature               | CloudFront                               | Global Accelerator                       |
+| --------------------- | ---------------------------------------- | ---------------------------------------- |
+| **Use Case**          | Static/dynamic content delivery (CDN)    | Global application acceleration          |
+| **Traffic Type**      | HTTP/HTTPS                               | TCP/UDP                                  |
+| **Routing**           | Edge cache-based routing                 | Network-level routing via AWS backbone   |
+| **Caching**           | Yes (edge caching for performance)       | No caching – direct acceleration         |
+| **Static IP Support** | ❌ No (Uses DNS-based routing)            | ✅ Yes (Anycast IPs)                      |
+| **Failover**          | Limited (only regional/Edge)             | Global failover between multiple regions |
+| **Protocol Support**  | HTTP/S only                              | HTTP/S + TCP + UDP                       |
+| **Best For**          | Static assets, websites, video streaming | Gaming, VoIP, APIs, low-latency apps     |
+
+
+🔸 🎯 When to Use Each – Solution Architect Decision Table
+| Scenario                                                              | Use                      |
+| --------------------------------------------------------------------- | ------------------------ |
+| Delivering static/dynamic web content globally (images, videos, HTML) | ✅ **CloudFront**         |
+| Hosting a website behind S3 or ALB                                    | ✅ **CloudFront**         |
+| Global multiplayer game requiring TCP/UDP acceleration                | ✅ **Global Accelerator** |
+| You need **static IPs** for whitelisting in firewall/security groups  | ✅ **Global Accelerator** |
+| Global users experiencing unpredictable latency to your APIs          | ✅ **Global Accelerator** |
+| Want CDN-style caching to reduce load on origin                       | ✅ **CloudFront**         |
+| Application must route users to **nearest AWS region**                | ✅ **Global Accelerator** |
+
+
+📌 Exam Tips (AWS Certified Solutions Architect)
+✅ Use Global Accelerator when:
+
+You need static IPs (whitelisting by enterprise firewalls)
+
+Low latency + global failover is a must
+
+You serve TCP/UDP traffic (e.g., game servers, voice/video apps)
+
+You need region-level failover (active-active or active-passive)
+
+✅ Use CloudFront when:
+
+Caching improves performance
+
+You want to reduce origin load and cost
+
+You serve content-heavy apps (media, web, APIs)
+
+🧠 Solution Architect Mindset Summary
+| Thought Process                                        | Service Chosen                    |
+| ------------------------------------------------------ | --------------------------------- |
+| "I want to cache and deliver content"                  | ✅ CloudFront                      |
+| "I want static IPs and latency-based routing globally" | ✅ Global Accelerator              |
+| "My app supports only TCP, no HTTP"                    | ✅ Global Accelerator              |
+| "I need fast routing + caching"                        | ✅ CloudFront + Regional Resources |
