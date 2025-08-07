@@ -1,0 +1,120 @@
+What is a VPN in AWS?
+VPN (Virtual Private Network) in AWS is used to securely connect your on-premises network or another cloud to your AWS VPC over the internet.
+
+Think of it as a private tunnel through the public internet.
+
+🎯 Why Use VPN?
+| Use Case                | Description                                           |
+| ----------------------- | ----------------------------------------------------- |
+| **Hybrid cloud setup**  | Connect your data center to AWS                       |
+| **Secure access**       | Encrypt traffic between AWS and external networks     |
+| **Temporary extension** | Bridge on-prem to cloud until full migration          |
+| **Cost-effective**      | Much cheaper than dedicated lines like Direct Connect |
+
+🧱 VPN Architecture Overview
+💡 Key Components:
+| Component                         | Role                                                              |
+| --------------------------------- | ----------------------------------------------------------------- |
+| **Customer Gateway (CGW)**        | Your side (on-prem device or software)                            |
+| **Virtual Private Gateway (VGW)** | AWS side – sits at the edge of your VPC                           |
+| **VPN Connection**                | Logical connection between CGW and VGW                            |
+| **VPC**                           | Your private cloud network on AWS                                 |
+| **Tunnel**                        | IPSec-encrypted path over the internet (2 tunnels for redundancy) |
+
+🔧 VPN Architecture Diagram (Text Format)
+Your Data Center (on-prem)             AWS Cloud
+-----------------------------          -----------------------
+| Customer Gateway (CGW)    | <--IPSec--> | Virtual Private Gateway (VGW) |
+-----------------------------          -----------------------
+        ↕                                        ↕
+   Router / Firewall                     Attached to a VPC
+
+✅ You define routing so that traffic to your AWS VPC goes through this secure tunnel.
+
+🔁 VPN Routing Options
+AWS supports two routing types for VPN:
+
+1️⃣ Static Routing
+You manually enter IP prefixes (CIDR blocks) of your on-prem network.
+
+Used when your device doesn’t support BGP.
+
+2️⃣ Dynamic Routing (BGP)
+AWS and your CGW exchange routes dynamically using BGP (Border Gateway Protocol).
+
+Auto adapts to changes and is preferred for large or flexible environments.
+
+🧠 Solution Architect’s Note:
+Use BGP where possible — improves high availability and reduces config errors.
+
+
+💸 VPN Pricing (As of Aug 2025 – double-check current AWS docs)
+Pricing Component	Cost
+VPN connection	$0.05 per hour ($36/month) per connection
+Data transfer	Charged per GB (based on standard AWS data transfer rates)
+
+⚠️ You are not charged for both tunnels — but only the active data transfer and connection hours.
+
+
+🚦 Gateway Limits
+| Limit                                   | Value                        | Can Be Increased?                   |
+| --------------------------------------- | ---------------------------- | ----------------------------------- |
+| **Virtual Private Gateways per Region** | 5                            | ✅ Yes                               |
+| **VPN connections per VGW**             | 10                           | ✅ Yes                               |
+| **Customer Gateways per Region**        | 50                           | ✅ Yes                               |
+| **VPN tunnels per connection**          | 2                            | ❌ Fixed                             |
+| **Throughput per VPN tunnel**           | \~1.25 Gbps (non-guaranteed) | ❌ No (but aggregate across tunnels) |
+
+🔐 VPN High Availability
+AWS creates 2 VPN tunnels per connection by default:
+
+Use both tunnels in your CGW config for failover.
+
+AWS manages tunnel health — if one fails, traffic flows through the second.
+
+Best practice: configure both tunnels on the customer side for automatic failover.
+
+🧠 Solution Architect Considerations
+| Question                                      | Best Practice                                              |
+| --------------------------------------------- | ---------------------------------------------------------- |
+| Need consistent high bandwidth?               | Consider **AWS Direct Connect** or **VPN + DX**            |
+| Want automatic routing failover?              | Use **BGP (Dynamic Routing)**                              |
+| Is VPN a long-term solution?                  | No – VPN is ideal for **temporary or backup** connectivity |
+| Need encrypted traffic between multiple VPCs? | Use **Transit Gateway + VPN**                              |
+| Need to connect to multiple AWS regions?      | Use **Cloud WAN or TGW with VPN**                          |
+| Using third-party firewall appliances?        | Consider **software-based CGW like pfSense**               |
+
+
+🧰 Alternatives to VPN
+| Option                    | Use Case                                                |
+| ------------------------- | ------------------------------------------------------- |
+| **Direct Connect**        | Dedicated fiber connection – for consistent performance |
+| **Site-to-Site VPN**      | Standard VPN to on-prem over internet                   |
+| **Client VPN**            | End-user laptops securely connecting to AWS             |
+| **Transit Gateway + VPN** | Multi-VPC and hybrid connectivity hub                   |
+
+📌 Summary Table (Exam-Ready)
+| Concept                           | Explanation                                   |
+| --------------------------------- | --------------------------------------------- |
+| **VPN**                           | Securely connects AWS to on-prem via internet |
+| **VGW (Virtual Private Gateway)** | AWS-side endpoint                             |
+| **CGW (Customer Gateway)**        | On-premises device (software or hardware)     |
+| **VPN Connection**                | IPSec tunnels (2 by default)                  |
+| **Routing types**                 | Static or BGP                                 |
+| **Pricing**                       | Per hour per connection + per GB data         |
+| **Limits**                        | 2 tunnels, \~1.25 Gbps each, VGW & CGW limits |
+| **Availability**                  | Use both tunnels; BGP improves failover       |
+
+
+Do you need to connect on-prem to AWS securely?
+ └── Yes
+     ├── Is it temporary, quick to set up?
+     │     └── Use Site-to-Site VPN
+     ├── Need high throughput, low latency?
+     │     └── Use Direct Connect (or DX + VPN for failover)
+     ├── Want to connect many VPCs and networks?
+     │     └── Use Transit Gateway + VPN
+     ├── Want end-users to connect securely from laptops?
+     │     └── Use AWS Client VPN
+
+
