@@ -1,0 +1,135 @@
+🚀 What is Amazon CloudFront?
+Amazon CloudFront is a Content Delivery Network (CDN) provided by AWS.
+It delivers web content (HTML, CSS, JS, images, videos, APIs, etc.) to users faster and securely, by caching copies in Edge Locations globally — closer to the user.
+
+⚙️ CloudFront Architecture Overview
+| **Component**      | **Description**                                                                                 |
+| ------------------ | ----------------------------------------------------------------------------------------------- |
+| **Origin**         | The backend source of content: S3, EC2, ALB, or external server (like example.com)              |
+| **Edge Locations** | 600+ global locations where CloudFront caches your content close to users                       |
+| **Distribution**   | A configuration for delivering content via CloudFront (has settings for origins, caching, etc.) |
+| **Cache Behavior** | Rules for how CloudFront should handle requests — path patterns, TTLs, etc.                     |
+| **TTL**            | Time content is cached at edge location before it’s fetched again from origin                   |
+| **Invalidation**   | Process to manually remove outdated cached content at edge locations                            |
+
+🧱 CloudFront Origin
+An Origin is the actual location where your content lives (the source):
+
+Amazon S3 → for static websites, images, video, downloadable files
+
+EC2/ALB → for dynamic web apps, custom APIs
+
+MediaPackage/MediaStore → for video streaming
+
+External origin → any public HTTP/S server (e.g., origin.example.com)
+
+🚚 CloudFront Distribution
+A Distribution is a globally distributed CDN configuration.
+| Type                                 | Use When                                        |
+| ------------------------------------ | ----------------------------------------------- |
+| **Web Distribution**                 | Standard websites, APIs, video, files (default) |
+| **RTMP Distribution** *(Deprecated)* | Legacy Flash media streaming                    |
+
+
+It has settings like:
+
+Origin
+
+Caching behavior
+
+SSL/TLS (HTTPS)
+
+WAF/firewall
+
+Geo restriction
+
+Logging
+
+⏱️ Time to Live (TTL)
+What is TTL?
+TTL (Time to Live) defines how long CloudFront caches objects at edge locations before rechecking with the origin.
+| TTL Setting     | Description                                              |
+| --------------- | -------------------------------------------------------- |
+| **Minimum TTL** | The shortest amount of time an object stays in cache     |
+| **Maximum TTL** | The longest allowed time an object is cached             |
+| **Default TTL** | The default cache time when no headers are set by origin |
+
+🧹 Cache Invalidation
+When your origin content changes but the TTL hasn't expired, you can:
+
+❗ Invalidate Cached Objects
+Manually tell CloudFront to remove outdated content from cache:
+
+Via AWS Console, CLI, or SDK
+
+Cost applies after free quota
+
+Use path patterns (/images/*, /index.html)
+
+🧠 Tip: Use versioned file names (e.g., style.v2.css) to avoid invalidations.
+
+🔗 Integration with Other AWS Services
+| Service                       | Benefit                                                             |
+| ----------------------------- | ------------------------------------------------------------------- |
+| **S3**                        | Host static assets, websites — delivered fast via CloudFront        |
+| **ALB/EC2**                   | Serve dynamic applications, APIs behind CloudFront                  |
+| **Lambda\@Edge**              | Run code at edge locations (auth, header manipulation, redirection) |
+| **WAF**                       | Protect apps from common web exploits (OWASP Top 10)                |
+| **Shield**                    | DDoS protection included by default                                 |
+| **Route 53**                  | DNS service to route traffic to CloudFront                          |
+| **Certificate Manager (ACM)** | Free SSL/TLS certs for HTTPS support                                |
+
+📦 Use Cases for CloudFront
+| Use Case                           | Explanation                                                         |
+| ---------------------------------- | ------------------------------------------------------------------- |
+| 🌍 **Global Website Acceleration** | Distribute static/dynamic website content faster to users worldwide |
+| 📁 **Static Asset Delivery**       | Cache and serve images, CSS, JS, fonts via S3 + CloudFront          |
+| 📱 **API Acceleration**            | Cache GET requests, throttle traffic, protect APIs with WAF         |
+| 🎬 **Video Streaming**             | Use with MediaPackage or HLS/DASH streaming from S3                 |
+| 🛡️ **Security + Compliance**      | Add WAF, geo restriction, signed URLs, origin shielding             |
+| 🖥️ **Software Downloads**         | Deliver large files (e.g., installers, updates) efficiently         |
+| 📉 **Reduce Backend Load**         | Offload frequent content requests to CloudFront edge locations      |
+
+
+✅ Key Benefits of CloudFront
+| Benefit                    | How it Helps                                        |
+| -------------------------- | --------------------------------------------------- |
+| ⚡ **Low Latency**          | Content served from nearest edge location           |
+| 💵 **Reduced Costs**       | Fewer origin fetches = lower S3/EC2/NAT charges     |
+| 🔐 **Secure**              | HTTPS, signed URLs, signed cookies, WAF integration |
+| ⚙️ **Highly Configurable** | Cache behavior, TTL, path-based routing             |
+| 🌐 **Global Reach**        | 600+ edge locations worldwide                       |
+| 🚫 **Geo Restriction**     | Block access from certain countries/regions         |
+| 🧠 **Edge Compute**        | Customize responses using **Lambda\@Edge**          |
+
+📊 Performance Flow: What Happens When a User Accesses Your Website?
+User types www.example.com
+
+DNS resolves to CloudFront distribution
+
+CloudFront routes request to nearest edge location
+
+Checks cache:
+
+If hit: Content delivered from cache
+
+If miss: CloudFront pulls from origin, caches it, then delivers
+
+Logs request (if enabled)
+
+Applies WAF (if enabled), and TLS termination
+
+🧠 Architect Mindset – When to Use CloudFront?
+Use CloudFront when:
+
+You want global low-latency access
+
+You want to secure content delivery (HTTPS, WAF, signed URLs)
+
+You want to reduce backend/server load
+
+You want to speed up APIs or static sites
+
+You want edge compute (Lambda@Edge) for performance, customization
+
+
