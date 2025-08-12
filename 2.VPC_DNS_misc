@@ -129,30 +129,7 @@ Verifying Connectivity	          Ping the Elastic IP	                           
 Ensuring Elastic IP Persistence 	Reboot the instance	                              Elastic IP remains unchanged
 Releasing the Elastic IP	       Disassociate and release the Elastic IP	           Elastic IP is removed from your account
 
-🔸 enableDnsSupport = true ✅
-"Can I resolve domain names inside this VPC?"
-If true → Instances can resolve DNS using AWS’s built-in DNS.
 
-If false → No DNS resolution works inside the VPC.
-
-🧠 Architect Insight:
-This is the core DNS engine switch.
-Keep it enabled always, unless you’re using custom DNS resolvers (rare).
-
-🔸 enableDnsHostnames = true ✅
-"Should AWS assign public DNS names to EC2 instances?"
-If true:
-
-Public IPs get public DNS names.
-Private IPs get private DNS names.
-
-If false:
-Even if EC2 has a public IP, no public DNS name is given.
-
-🧠 Architect Insight:
-Required if you want to SSH using ec2-xx-xx-xx-xx.compute.amazonaws.com
-Needed for internal name resolution
-Also required when using Route 53 private hosted zones
 
 🧪 Example Scenarios
 Example 1: Default VPC
