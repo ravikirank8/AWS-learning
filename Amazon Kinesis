@@ -1,0 +1,70 @@
+| **Kinesis Product**       | **Primary Use Case**                                                                                                                                   | **Typical Latency**                        | **Common Target Services**                                     |
+| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------ | -------------------------------------------------------------- |
+| **Kinesis Data Streams**  | Custom real-time data ingestion & processing — e.g., clickstream analysis, fraud detection, IoT telemetry.                                             | **Milliseconds** (near real-time)          | EC2, ECS/EKS (containers), Lambda, EMR, Kinesis Data Analytics |
+| **Kinesis Data Firehose** | Fully managed ingestion + optional ETL, delivering to analytics/storage with no shard management — e.g., log archiving, streaming analytics ingestion. | **\~60 seconds** (due to buffering)        | S3, Redshift, OpenSearch Service, Splunk                       |
+| **Kinesis Video Streams** | Ingest, store, and process live or recorded video/audio + time-encoded sensor data — e.g., security monitoring, AI-powered vision apps.                | **Varies** (optimized for video workloads) | Lambda, SageMaker, custom ML, third-party video apps           |
+
+
+Amazon Kinesis – Product Overview
+
+Kinesis is AWS’s real-time data streaming platform.
+Think of it as a family of services that let you capture, process, and analyze data in motion — from clickstreams and IoT sensor readings to live video.
+
+1. Kinesis Data Streams (KDS)
+
+Purpose: Real-time, custom processing of structured data (logs, metrics, events).
+How it works:
+Data is divided into shards (capacity units).
+You control scaling by adding/removing shards.
+Producers → Kinesis → Consumers (can be Lambda, EC2, Kinesis Data Analytics, etc.).
+Retention: Default 24 hours, up to 365 days.
+Use Cases: Fraud detection, real-time analytics dashboards, log processing.
+
+Integration Examples:
+AWS Lambda (event processing)
+Amazon S3 (via consumer apps)
+DynamoDB (real-time lookups)
+Redshift (analytics)
+
+2. Kinesis Data Firehose
+Purpose: Real-time delivery of data to storage and analytics services — no custom code.
+Fully managed, auto-scales, no shard management.
+
+Destinations: S3, Redshift, OpenSearch, Splunk, custom HTTP endpoints.
+Data Transformation: Optional Lambda function for data formatting.
+
+Use Cases:
+Stream logs directly to S3 for batch analysis
+Push event data to Redshift for BI
+Deliver app activity logs to OpenSearch
+
+3. Kinesis Video Streams
+Purpose: Ingest and process real-time video and audio.
+Features:
+Supports playback, machine learning (Rekognition for facial detection, object recognition).
+Video is chunked and stored temporarily, can be processed by consumers.
+
+Use Cases:
+Security camera feeds
+Smart home device video analytics
+Live event streaming with AI insights
+
+4. Kinesis Data Analytics
+
+Purpose: Real-time analytics on streaming data using SQL or Apache Flink.
+Works with: Kinesis Data Streams or Firehose as input.
+Use Cases:
+Filter, aggregate, and enrich data in motion
+Trigger actions based on trends
+
+Common Architecture Pattern
+Producer Library sends data into Kinesis (KPL for data, Kinesis Video Streams Producer SDK for video).
+Kinesis Service stores and manages the stream in shards.
+Consumer Library (KCL or Kinesis Video Streams Consumer SDK) retrieves and processes the data.
+Integrations send results to:
+
+S3 (storage)
+Redshift (analytics)
+Elasticsearch/OpenSearch (search)
+Lambda (event triggers)
+SageMaker (ML)
