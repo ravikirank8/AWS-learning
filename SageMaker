@@ -357,3 +357,176 @@ Differentiate real-time vs. batch inference.
 
 Always consider automation + cost optimization + security.
 
+=======================================================
+
+SageMaker Production Architecture – E‑Commerce Recommendations (End‑to‑End)
+
+Monolithic view of build → train → tune → deploy → operate with AWS-native integrations. Use this as a quick exam/implementation reference.
+
+[Users & Apps]
+   Web/App (SPA, Mobile)
+        |
+        v
++------------------+
+|  API Gateway     |  ← Auth (Cognito/OIDC), Throttling
++------------------+
+        |
+        v
++------------------+           (Realtime inference path)
+|  Lambda (thin)   | --invoke--> +----------------------------+
++------------------+             | SageMaker Real‑Time EP     |
+        |                        |  (Model: Recommender)      |
+        |                        +----------------------------+
+        |                                 |
+        |                                 v
+        |                         +----------------+
+        |                         | Data Capture   |  (inference logs: req/resp/sample)
+        |                         +----------------+
+        |                                 |
+        |                                 v
+        |                         +----------------+
+        |                         |  S3 (raw)      |  ← captured payloads for monitoring
+        |                         +----------------+
+        |                                 |
+        |                                 v
+        |                         +----------------+        +------------------+
+        |                         | Model Monitor  | -----> | CloudWatch Alarms|
+        |                         +----------------+        +------------------+
+        |
+        |  (User events)
+        v
++------------------+      +------------------+      +------------------+
+| CloudFront (CDN) | ---> | Kinesis/Firehose | ---> |      S3 (raw)    |  (clicks, views)
++------------------+      +------------------+      +------------------+
+                                                    |  + Glue Catalog  |
+                                                    +------------------+
+                                                           |
+                                                           v
+                                              +-------------------------+
+                                              | Glue ETL / Processing   |
+                                              |  • Clean/Join/Parquet   |
+                                              +-------------------------+
+                                                           |
+                                                           v
+                                              +-------------------------+
+                                              |   S3 (curated, parquet) |
+                                              +-------------------------+
+                                                           |
+                                +--------------------------+--------------------------+
+                                |                                                     |
+                                v                                                     v
+                     +------------------------+                           +------------------------+
+                     | SageMaker Processing   | (feature gen/validation)  | SageMaker Data Wrangler|
+                     +------------------------+                           +------------------------+
+                                |                                                     |
+                                +--------------------------+--------------------------+
+                                                           v
+                                              +-------------------------+
+                                              | SageMaker Training Job  |
+                                              |  • Built‑in or BYOC     |
+                                              |  • Spot + checkpoints   |
+                                              |  • Dist. training (DDP) |
+                                              +-------------------------+
+                                                           |
+                                                           v
+                                              +-------------------------+
+                                              | HPO (Auto Model Tuning) |
+                                              |  • Trials/Experiments   |
+                                              +-------------------------+
+                                                           |
+                                                           v
+                                              +-------------------------+
+                                              | Model Registry          |
+                                              |  • Version + Metrics    |
+                                              |  • Approval gates       |
+                                              +-------------------------+
+                                                           |
+                                                           v
+                                              +-------------------------+
+                                              | CI/CD – SM Pipelines    |
+                                              |  (Dev→Stg→Prod)         |
+                                              +-------------------------+
+                                                           |
+                                                           v
+                                        +------------------------+   +------------------------+
+                                        | Blue/Green or Canary   |   | Batch Transform        |
+                                        | Real‑Time Endpoint(s) |   | (nightly bulk scores)  |
+                                        +------------------------+   +------------------------+
+
+
+
+
+Numbered Flow (What happens end‑to‑end)
+
+Users interact with web/app → requests routed via CloudFront → API Gateway for APIs.
+
+User activity events (clicks, add‑to‑cart) are streamed via Kinesis/Firehose to S3 (raw).
+
+Glue ETL/Jobs clean, join with product catalog, convert to Parquet, update Glue Data Catalog.
+
+Feature engineering with SageMaker Processing/Data Wrangler outputs curated features to S3.
+
+Training Job (e.g., XGBoost/Factorization Machines/PyTorch) pulls curated data from S3; use Spot + checkpoints, optional distributed training.
+
+Automatic Model Tuning (HPO) searches hyperparameters; Experiments/Trials track metrics.
+
+Best model & metadata pushed to Model Registry; Pipelines enforce approval & promote across dev→stg→prod.
+
+Deploy to Real‑Time Endpoint (Autoscaling). For bulk nightly recommendations also run Batch Transform.
+
+Inference requests come via API Gateway→Lambda→Endpoint (low‑latency). Enable Data Capture on the endpoint.
+
+Model Monitor analyzes captured traffic for data drift/quality; alerts via CloudWatch. Triggers retraining Pipeline if thresholds breached.
+
+Design Choices & Exam Cues
+
+Storage: S3 raw/curated + Parquet + partitions → lower scan cost & faster IO.
+
+Security: VPC‑only Studio/Endpoints, KMS on S3/Endpoints, least‑privilege IAM, Lake Formation for governed datasets.
+
+Cost: Spot training + checkpoints; right‑size endpoints; use Serverless or MME for spiky/Many‑Small‑Models cases; Batch for offline.
+
+Reliability: Multi‑AZ endpoints, canary/blue‑green; rollback on KPI regression with Pipelines gates.
+
+Observability: Experiments for lineage, CloudWatch metrics/alarms, Model Monitor + Clarify (bias/explainability) as compliance hooks.
+
+Picking an Inference Pattern (Decision Mini‑Tree)
+
+Bursty, low TPS → SageMaker Serverless Inference.
+
+Consistent, low latency → Real‑Time Endpoint (autoscale).
+
+Hundreds of small models → Multi‑Model Endpoint (MME).
+
+Long‑running jobs / large payloads → Asynchronous Inference.
+
+No online SLA, periodic scoring → Batch Transform.
+
+Example Model & Metrics
+
+Use case: Product recommendations
+
+Algorithms: Factorization Machines or matrix factorization (Alt: DL w/ PyTorch)
+
+Key metrics: Precision@K, Recall@K, MAP@K, CTR uplift
+
+Promotion gate: New model promoted only if Precision@10 ≥ baseline by ≥ 2% and p95 latency ≤ 120 ms.
+
+Quick Integration Notes
+
+Data: S3 + Glue Catalog (Athena/QuickSight also consume)
+
+Streams: Kinesis/Firehose → S3 raw
+
+ETL: Glue Jobs / Data Wrangler → curated S3
+
+ML: SM Processing/Training/HPO/Registry/Pipelines
+
+Serve: Real‑Time EP + Batch Transform
+
+Ops: Model Monitor, CloudWatch, CloudTrail
+
+Identity: IAM, Cognito (end‑user auth), Lake Formation (table/column perms)
+
+Memory hook: S3 is the system of record; Pipelines is the conveyor belt; Endpoints are the storefront; Monitor is loss prevention.
+
