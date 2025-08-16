@@ -1,0 +1,95 @@
+🔹 What is Amazon Comprehend?
+
+Amazon Comprehend is a Natural Language Processing (NLP) service that uses machine learning to extract insights from text.
+
+It can detect sentiment, key phrases, entities, topics, and language.
+
+Fully serverless & managed → you don’t need to build/train ML models.
+
+🔹 Key Features of Amazon Comprehend
+
+✅ Sentiment Analysis – Positive, Negative, Neutral, or Mixed.
+✅ Entity Recognition – Extracts names, places, dates, organizations, etc.
+✅ Key Phrase Extraction – Identifies important phrases (“battery life is poor”).
+✅ Language Detection – Detects over 100 languages automatically.
+✅ Topic Modeling – Groups documents by common themes.
+✅ PII Detection – Detects personal data like phone numbers, SSNs, emails.
+✅ Custom Classification – Train custom models for domain-specific categories (e.g., Finance, Healthcare).
+✅ Custom Entity Recognition – Extract custom entities (e.g., “Policy ID”, “Medication Name”).
+✅ Real-Time or Batch Processing – Works on streaming text (e.g., Kinesis, S3).
+
+🔹 Sentiment Analysis Use Case: Product Reviews
+
+Imagine you run an e-commerce platform like Amazon:
+
+Customer Review:
+
+“The phone’s camera is amazing, but the battery drains too fast.”
+
+Comprehend Output:
+
+Overall Sentiment: Mixed
+
+Positive Entity: Camera
+
+Negative Entity: Battery life
+
+Key Phrases: “camera is amazing”, “battery drains too fast”
+
+Business Value:
+
+Product managers can see common complaints (battery).
+
+Marketing team highlights strengths (camera).
+
+Automated workflows can escalate negative reviews to support.
+
+👉 This helps in customer experience improvement + product strategy.
+
+🔹 Managed Service Benefits of Comprehend
+
+✅ Fully Managed – No ML expertise needed; AWS handles training + scaling.
+✅ Multi-language Support – Works with major global languages.
+✅ Near Real-Time Processing – Stream reviews, tweets, or chat messages as they come in.
+✅ Seamless AWS Integration – Works with:
+
+S3 → Store raw text documents.
+
+Kinesis → Stream real-time text data (e.g., tweets).
+
+Lambda → Trigger workflows after analysis.
+
+Athena/QuickSight → Query and visualize sentiment trends.
+✅ Scalable – From 1 review → millions per second.
+
+🔹 Real-World Example:
+
+Airline Feedback System
+
+Passengers submit feedback after flights.
+
+Comprehend analyzes reviews:
+
+“Crew was friendly, but flight was delayed.”
+
+Output: Mixed sentiment → Positive (Crew), Negative (Delay).
+
+Airline operations team → fix delays.
+
+HR team → reward crew performance.
+
+🔹 Exam Mindset (Key Pointers)
+
+If question mentions text analysis / NLP / sentiment detection → Answer Amazon Comprehend.
+
+If asked about language detection / extracting entities / topic modeling → Answer Comprehend.
+
+Compare with:
+
+Transcribe → Speech → Text.
+
+Polly → Text → Speech.
+
+Lex → Conversational AI.
+
+Comprehend → Understands meaning of text.
