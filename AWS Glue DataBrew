@@ -1,0 +1,101 @@
+🔹 What is AWS Glue DataBrew?
+
+AWS Glue DataBrew is a visual, no-code data preparation tool that helps data analysts and data scientists clean, normalize, and transform raw data before analysis or ML training.
+
+👉 Think of it as Excel on steroids + ETL automation, but serverless and scalable.
+
+🔹 How Glue DataBrew Works
+
+Connect Data Sources
+
+Import data from S3, Redshift, RDS, Glue Data Catalog, DynamoDB, Salesforce, JDBC sources.
+
+Profile the Data
+
+Automatically scans dataset.
+
+Identifies missing values, outliers, data types, schema mismatches.
+
+Apply Transformations (Recipes)
+
+Prebuilt 250+ transformations (filter, dedupe, normalize, format dates, standardize text, etc.).
+
+Each applied step is recorded in a “recipe” (reusable, repeatable set of transformations).
+
+Preview & Validate
+
+Interactive, spreadsheet-like UI to test transformations before running them at scale.
+
+Run Jobs at Scale
+
+DataBrew executes transformations as serverless jobs.
+
+No cluster setup (runs on AWS-managed infrastructure).
+
+Export Results
+
+Cleaned/normalized data written back to S3, Redshift, RDS, Snowflake, Data Catalog, etc.
+
+Ready for Athena queries, BI dashboards, ML pipelines.
+
+🔹 Example Workflow (Real Life)
+
+📌 Example: Retail Company analyzing sales data
+
+Raw sales transactions loaded into S3 (from POS systems, CSVs, APIs).
+
+DataBrew connected to the dataset.
+
+Analysts applied recipes to:
+
+Remove duplicate transactions.
+
+Convert date formats.
+
+Standardize product categories.
+
+Fill missing values with averages.
+
+Transformed dataset saved into Amazon Redshift.
+
+BI team uses QuickSight to visualize cleaned data.
+
+ML team uses cleaned data in SageMaker for demand forecasting.
+
+🔹 Key Features of Glue DataBrew
+
+✅ No-code data prep → drag-and-drop UI for analysts (no Python/SQL required).
+
+✅ 250+ built-in transformations (dedupe, normalize, enrich, encode).
+
+✅ Reusable recipes → define once, apply at scale.
+
+✅ Serverless → no infrastructure to manage (scales automatically).
+
+✅ Data Profiling → detect anomalies, missing values, schema mismatches.
+
+✅ Integration with AWS services → S3, Redshift, RDS, Glue Catalog, DynamoDB.
+
+✅ Collaboration → multiple team members can share and reuse recipes.
+
+✅ Monitoring & Auditing → via CloudWatch, CloudTrail.
+
+🔹 Solutions Architect Exam Focus
+
+DataBrew is not for ETL orchestration (that’s Glue ETL).
+
+DataBrew is not for big data batch compute (that’s EMR/Spark).
+
+DataBrew is not for real-time streaming (that’s Kinesis/MSK).
+
+DataBrew is best when:
+
+Business analysts/non-technical users need to clean data.
+
+Preparing data for BI dashboards (QuickSight, Athena).
+
+Preprocessing datasets for ML pipelines.
+
+Standardizing datasets before putting into Redshift, S3 Data Lake, or Glue Data Catalog.
+
+👉 Key Exam Tip: If the scenario says “a business analyst needs to prepare data without coding” → answer is Glue DataBrew.
