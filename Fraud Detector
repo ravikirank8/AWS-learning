@@ -1,0 +1,96 @@
+🔹 What is Amazon Fraud Detector?
+
+Amazon Fraud Detector is a fully managed ML service designed to identify fraudulent activities (payments, fake accounts, fake reviews, identity theft).
+
+AWS automates the data prep, model training, deployment → You just define rules + feed data.
+
+It provides real-time responses in milliseconds → critical for fraud detection.
+
+🔹 How Fraud Detector Works
+
+Data Collection
+
+Gather historical data: e.g., transaction logs, user login patterns, or review metadata.
+
+Model Training
+
+Fraud Detector uses ML + built-in fraud detection algorithms trained on Amazon’s global fraud detection expertise (from AWS & Amazon retail).
+
+Rule Creation
+
+You define rules (e.g., flag transaction if score > 80).
+
+Combines ML scores + business logic.
+
+Real-Time Prediction
+
+New events (transactions, sign-ups, reviews) are scored in milliseconds.
+
+High-risk ones get blocked or sent for manual review.
+
+🔹 Setting Up Fraud Detector
+
+Define Event Type → (e.g., payment, account sign-up, review submission).
+
+Upload Data → CSV data into S3 (historical fraud/no-fraud events).
+
+Train ML Model → Fraud Detector auto-selects the best fraud detection model.
+
+Set Rules + Thresholds → Combine model scores + conditions.
+
+Deploy Model Endpoint → Ready for real-time use via API.
+
+🔹 Integrating with Client Applications
+
+Fraud Detector exposes APIs → apps can call in real-time.
+
+Example integration:
+
+E-commerce checkout → Before payment confirmation, Fraud Detector checks the transaction.
+
+Account creation → Checks if signup looks suspicious (IP, velocity, device fingerprint).
+
+Content platform → Flags fake or abusive reviews.
+
+🔹 Practical Example: Fake or Abusive Reviews 📝
+
+Imagine an online marketplace (like Amazon or Yelp):
+
+A user submits a product review.
+
+Fraud Detector evaluates:
+
+IP address reputation (is it from a bot network?)
+
+User’s past behavior (sudden surge of reviews?).
+
+Text metadata (duplicate wording, review velocity).
+
+If the ML model detects fraud likelihood > 85% → review is flagged for human moderation.
+
+Honest reviews pass through → protecting platform credibility.
+
+🔹 Key Features (Exam Focus)
+
+✅ Fully managed ML → no ML expertise needed.
+✅ Real-time decisions (ms) → prevents fraud before damage.
+✅ Customizable → You can combine ML predictions + business rules.
+✅ Seamless AWS integration → S3 (data), CloudWatch (monitoring), Lambda (action automation), API Gateway (expose fraud API).
+✅ Industry Use Cases:
+
+Online payments → detect stolen cards.
+
+Account sign-ups → detect fake accounts.
+
+Reviews/comments → detect spam/fraudulent content.
+
+🔹 Exam Mindset (Remember)
+
+Keyword: Fraud detection with near real-time ML.
+
+Different from Comprehend/Polly/etc. → It’s domain-specific for fraud use cases.
+
+Workflow = Data → ML model → Rule-based thresholds → Real-time API → Action (approve/block/manual review).
+
+✅ Think of Fraud Detector as a fraud firewall for apps:
+AI + rules filter out suspicious activity before it causes loss.
