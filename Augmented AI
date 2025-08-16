@@ -1,0 +1,70 @@
+🔹 What is Amazon Augmented AI (A2I)?
+
+Amazon A2I = A service that brings human review into AI/ML workflows.
+
+Sometimes ML predictions are not 100% confident → A2I lets humans validate those predictions.
+
+Example: An ML model says "90% sure this is a cat" → A2I can route such low-confidence cases to a human reviewer.
+
+🔹 Key Features of Amazon A2I
+
+✅ Human-in-the-Loop (HITL) → Humans review AI predictions when confidence is low or rules are triggered.
+✅ Built-in Workflows → Prebuilt templates for Rekognition (image moderation) and Textract (document processing).
+✅ Custom Workflows → You can integrate with any ML model (SageMaker, custom AI, third-party).
+✅ Flexible Reviewer Pools:
+
+Internal employees
+
+Amazon Mechanical Turk
+
+Third-party vendor workforces
+✅ Continuous Model Improvement → Feedback loop improves ML model accuracy.
+✅ Compliance & Accuracy → Ensures sensitive use cases (healthcare, finance, legal) meet quality standards.
+
+🔹 How A2I Works (Workflow)
+
+AI/ML Model Prediction (e.g., Textract extracts text from a scanned contract).
+
+Confidence Check → If below threshold (say 85%), send to A2I.
+
+Human Review Task → Assigned to a reviewer (internal team / Mechanical Turk).
+
+Feedback Stored in S3 → Human-verified data stored securely.
+
+Model Retraining → Feedback can be fed back into SageMaker to improve model.
+
+🔹 Real-World Example
+
+Healthcare Insurance Claims Processing 🏥:
+
+An insurer uses Textract to extract data from claim forms.
+
+Most claims are correctly processed automatically.
+
+For claims where the AI confidence is low (unclear handwriting, unusual cases), A2I routes them to a human claims officer.
+
+Officer validates the data → Approved/rejected.
+
+Model keeps improving with feedback.
+
+🔹 Value: Reduces errors, ensures compliance, and saves cost by only involving humans when necessary.
+
+🔹 Exam Mindset (Key Points to Remember)
+
+Keyword: Human-in-the-loop (HITL).
+
+When to use? → Low-confidence ML predictions OR high-risk decisions.
+
+Integrates with? Rekognition, Textract, SageMaker, custom ML.
+
+Reviewer Options: Internal, Mechanical Turk, or 3rd party vendors.
+
+Difference vs other AI services:
+
+Rekognition → Computer vision
+
+Textract → Document text extraction
+
+A2I → Adds human validation layer on top of ML outputs
+
+✅ Think of A2I like a safety net for AI — ML makes 95% of decisions, but humans double-check the tricky 5%.
