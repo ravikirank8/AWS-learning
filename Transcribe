@@ -1,0 +1,80 @@
+🔹 What is Amazon Transcribe?
+
+Amazon Transcribe is a speech-to-text service.
+
+It automatically converts audio/video into accurate, searchable text.
+
+Useful for call centers, media, healthcare, and legal industries.
+
+🔹 Key Feature: Speaker Diarization
+
+👉 Definition: Speaker diarization is the process of detecting and labeling different speakers in an audio file.
+
+✅ How it works:
+
+Audio file is uploaded to S3.
+
+Transcribe processes the recording.
+
+Diarization algorithm assigns speaker labels (e.g., Speaker 1, Speaker 2).
+
+Output text includes timestamps + speaker tags → making it clear who said what.
+
+👉 Example:
+
+Speaker 1: Hello, I’d like to check my order status.  
+Speaker 2: Sure, can you provide your order ID?  
+
+
+📌 Exam Tip: Speaker diarization = multi-speaker transcription.
+
+🔹 Extending the Workflow with AWS Integration
+
+Amazon Transcribe integrates with other AWS services for end-to-end automation:
+
+Amazon S3 → store raw audio + transcribed text output.
+
+AWS Lambda → triggers after transcription completes (e.g., run sentiment analysis).
+
+Amazon Comprehend → analyze transcripts for sentiment, keywords, entities.
+
+Amazon Kinesis → stream live transcription in real time.
+
+Amazon QuickSight → visualize call analytics dashboards.
+
+⚠️ Important Note: Ensure Lambda functions + IAM roles are configured correctly → so transcription jobs can fetch input audio (from S3) and store output text (back into S3).
+
+🔹 Use Case: Call Analytics (Customer Support) ☎️
+
+Scenario: A company wants insights from call center conversations.
+
+Workflow:
+
+Call audio stored in S3.
+
+Amazon Transcribe → converts audio into text with speaker diarization.
+
+Amazon Comprehend → runs sentiment analysis (positive/negative calls).
+
+Amazon QuickSight → creates a dashboard showing customer mood trends.
+
+Managers → quickly spot unhappy customers & improve support.
+
+🔹 Key Features (Exam Focus)
+
+✅ Automatic Speech Recognition (ASR) – converts speech to text.
+✅ Speaker Diarization – labels different speakers in conversations.
+✅ Custom Vocabulary – handle domain-specific terms (e.g., medical, legal).
+✅ Real-time & Batch Transcription – works for both live streams & stored files.
+✅ Multi-language Support – supports many languages for global apps.
+✅ AWS Integration – seamless with S3, Lambda, Comprehend, Kinesis, QuickSight.
+
+🔹 Exam Mindset
+
+Transcribe = Speech → Text.
+
+Speaker diarization = Identifying multiple speakers in recordings.
+
+Integration = Combine with S3 + Lambda + Comprehend for call analytics.
+
+✅ Think of Transcribe like an AI “meeting note-taker” that also knows who is speaking—critical for interviews, meetings, and customer support analytics.
