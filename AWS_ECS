@@ -1,6 +1,6 @@
 AWS ECS is a fully managed container orchestration service that helps you run and scale Docker containers on AWS. It supports two launch types:
 
-Fargate (serverless containers)
+Fargate (serverless containers).
 
 EC2 (you manage the compute instances)
 
