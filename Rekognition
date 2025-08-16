@@ -1,0 +1,78 @@
+🔹 What is Amazon Rekognition?
+
+A fully managed AI service for image and video analysis.
+
+Uses deep learning models (pretrained, no ML expertise needed).
+
+Serverless → you just upload images/videos to S3, Rekognition does the heavy lifting.
+
+🔹 Key Features
+
+Object & Scene Detection → Identify cars, trees, furniture, etc.
+
+Facial Analysis → Detect faces, emotions (happy, sad, angry), age range, gender.
+
+Face Comparison & Search → Compare faces across datasets (e.g., employee check-in systems).
+
+Text in Images (OCR) → Extract text from road signs, receipts, documents.
+
+Content Moderation → Detect explicit, unsafe, or inappropriate content.
+
+Celebrity Recognition → Identify well-known public figures.
+
+Custom Labels → Train Rekognition to detect business-specific objects (e.g., company logo, damaged parts in manufacturing).
+
+🔹 Integration with Other AWS Services
+
+S3 → Store images/videos.
+
+Lambda → Trigger workflows (e.g., scan images as soon as they’re uploaded).
+
+SNS / SQS → Notify when unsafe content is detected.
+
+Athena/QuickSight → Analyze detection logs and visualize reports.
+
+Step Functions → Automate review pipelines.
+
+🔹 Real-Life Example (Production Use Case)
+
+Imagine you’re building a social media platform:
+
+Step 1: Upload → Users upload images/videos → stored in S3.
+
+Step 2: Trigger → An S3 event triggers Lambda.
+
+Step 3: Process → Lambda calls Rekognition:
+
+Detects nudity/violence (content moderation).
+
+Detects text in memes.
+
+Detects faces for tagging.
+
+Step 4: Decision:
+
+If unsafe → store in “quarantine” S3 bucket and send SNS alert to moderation team.
+
+If safe → publish content directly.
+
+Step 5: Analytics → Store Rekognition results in DynamoDB or Athena, visualize reports in QuickSight.
+
+👉 This setup ensures automated moderation at scale, but also allows manual review when confidence scores are below a threshold.
+
+🔹 Exam Mindset (Key Points to Remember)
+
+✅ Rekognition is serverless – no infra management.
+✅ Best for real-time moderation, security, identity verification.
+✅ Supports batch + real-time analysis.
+✅ Confidence thresholds are important (too low → false positives, too high → false negatives).
+✅ Can be integrated in streaming pipelines (e.g., Kinesis Video Streams).
+✅ Security → use KMS encryption for stored media, IAM for access control.
+
+👉 In exam questions, Rekognition usually appears when:
+
+You need content moderation (images/videos filtering).
+
+You need facial recognition for authentication or search.
+
+You need text recognition in images without training your own ML model.
