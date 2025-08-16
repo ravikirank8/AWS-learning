@@ -1,0 +1,58 @@
+🔹 What is Amazon Textract?
+
+Amazon Textract is a document text extraction service.
+Unlike OCR that just scans text, Textract also understands structure (forms, tables, key-value pairs).
+
+📌 Think of it as OCR + AI → not only reads but also understands how data is organized in documents.
+
+🔹 Features / Key Capabilities
+
+✅ Extract Raw Text → Reads all printed text from scanned docs, PDFs, or images.
+✅ Key-Value Pairs → Identifies form fields like "Name: Ravi", "DOB: 16-08-1995".
+✅ Tables Extraction → Preserves rows/columns from invoices, spreadsheets, etc.
+✅ Signature Detection → Recognizes whether a document has a signature box filled.
+✅ Multiple Output Formats → JSON, CSV, TXT → easy to integrate into apps.
+✅ Query-based Extraction → You can ask questions like “What is the invoice number?” and Textract will return the answer.
+✅ Multi-Document Support → Works for scanned docs, PDFs, contracts, IDs, receipts.
+
+🔹 How It Works (Simple Workflow)
+
+Upload document (PDF, image, scanned file) to Amazon S3.
+Trigger Textract using API or Lambda.
+Textract processes → extracts text + structure.
+Output delivered in JSON / CSV / TXT format.
+Results can be further processed by Comprehend (to analyze) or stored in a database.
+
+🔹 Example Workflow (Invoice Processing)
+Vendor uploads invoice to S3.
+Textract extracts:
+Vendor Name
+Invoice Number
+Total Amount
+Line Items in table format
+Store results in DynamoDB.
+Trigger Lambda to validate payment against ERP system.
+👉 Saves manual data entry, reduces errors.
+🔹 Real-World Use Case
+Bank Loan Processing 🏦
+Customer uploads ID, payslips, and application forms.
+
+Textract extracts Name, Address, Income, Signature automatically.
+
+Results fed into workflow system (e.g., Step Functions).
+
+Loan officers only verify, not retype.
+
+📌 Exam Tip: Textract is commonly paired with S3 + Comprehend + Lambda + DynamoDB.
+
+🔹 Exam Mindset
+
+Textract ≠ basic OCR → It extracts forms + tables + key-value pairs.
+
+Output formats: JSON, CSV, TXT.
+
+Special feature: query-based extraction.
+
+Best suited for: Automating forms, invoices, contracts, identity documents.
+
+✅ Think of Textract as your “AI-powered document clerk” → it doesn’t just read, it understands and organizes the information for downstream processing.
