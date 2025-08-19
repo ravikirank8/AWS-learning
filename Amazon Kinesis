@@ -5,6 +5,13 @@
 | **Kinesis Video Streams** | Ingest, store, and process live or recorded video/audio + time-encoded sensor data — e.g., security monitoring, AI-powered vision apps.                | **Varies** (optimized for video workloads) | Lambda, SageMaker, custom ML, third-party video apps           |
 
 
+
+Product	Use Case	Latency	Target Services
+Data Streams	Custom streaming data ingestion for applications like website behavior tracking.	Milliseconds	EC2, containerized apps, Lambda, EMR, Data Analytics
+Data Firehose	Automatically ingesting data and performing ETL before streaming to data lakes or warehouses.	~60 seconds (batching)	S3, Redshift, OpenSearch Service, Splunk
+Video Streams	Streaming and processing video plus time-encoded data from devices like cameras and sensors.	Varies (designed for video)	Lambda, SageMaker, third-party applicati
+
+
 Amazon Kinesis – Product Overview
 
 Kinesis is AWS’s real-time data streaming platform.
